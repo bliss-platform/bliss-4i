@@ -1,4 +1,9 @@
-# CLI Convention for The Bliss Runtime  
+---
+
+title: CLI Convention for Bliss
+
+---
+
 For Platform bliss-4i\
 7 December 2025
 
