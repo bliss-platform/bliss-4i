@@ -1,18 +1,1 @@
-title: "Bliss Documentation"
-description: "Official Documentation for the Bliss Platform"
-url: "https://github.com/bliss-platform/bliss-4i"
-
-theme: null
-remote_theme: themefisher/doks
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-
-markdown: kramdown
-highlighter: rouge
-
-collections:
-  pages:
-    output: true
-    permalink: /:path/
+remote_theme: mmistakes/minimal-mistake
