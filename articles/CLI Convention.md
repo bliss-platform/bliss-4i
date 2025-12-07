@@ -1,4 +1,9 @@
-# CLI Convention for The Bliss Platform
+---
+layout: single
+title: "CLI Convention for The Bliss Platform"
+sidebar:
+  nav: "articles"
+---
 
 For Platform bliss-4i\
 7 December 2025

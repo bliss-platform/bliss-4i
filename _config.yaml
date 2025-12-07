@@ -1,1 +1,16 @@
-remote_theme: mmistakes/minimal-mistake
+title: "Bliss Documentation"
+description: "Docs for the Bliss Platform"
+
+# Use Minimal Mistakes via remote_theme (GitHub Pages compatible)
+remote_theme: "mmistakes/minimal-mistakes"
+
+plugins:
+  - jekyll-include-cache
+
+markdown: kramdown
+highlighter: rouge
+
+collections:
+  articles:
+    output: true
+    permalink: /articles/:path/
