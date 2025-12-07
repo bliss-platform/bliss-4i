@@ -58,13 +58,13 @@ The `project.toml` stores important information about the project itself. It inc
 The mandatory format looks like this:
 
 ```toml
-[ project ]
+[project]
 name = "Name of Project"
 root = "my_app"
 version = "1.8.5-alpha-beta-any-possible-string"
 platform = "4i" #corresponds to ni
 
-[ dependencies ]
+[dependencies]
 std.this = "1.0.0@4i"
 std.scheme = "1.x.x@4i"
 
@@ -72,7 +72,7 @@ std.scheme = "1.x.x@4i"
 
 A project is fully described using these parameters. Any new additions, like
 ```toml
-[ author ]
+[author]
 github = "https://github.com/author/repo"
 ```
 and so on are additional metatdata and are not processed by the bliss platform tools **in context of project**.
