@@ -4,4 +4,4 @@ plugins:
   - jekyll-seo-tag
 
 title: Bliss Docs
-favicon: "/bliss_fav.ico"
+favicon_ico: "/bliss_fav.ico"
