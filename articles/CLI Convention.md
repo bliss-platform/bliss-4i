@@ -1,8 +1,4 @@
----
-
-title: CLI Convention for Bliss
-
----
+# CLI Convention for The Bliss Platform
 
 For Platform bliss-4i\
 7 December 2025
