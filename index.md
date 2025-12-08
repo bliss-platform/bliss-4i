@@ -18,9 +18,9 @@ This website contains all the documents, specifications, articles and thought-pr
 
 ## Table of Contents
 
-- [Articles](/articles) with day-to-day additions and specifications
+- [Articles](bliss-4i/articles) with day-to-day additions and specifications
 
-- [Packager](/packager) with all documents related to the packaged, including tutorials and specifications
+- [Packager](bliss-4i/packager) with all documents related to the packaged, including tutorials and specifications
 
 ---
 
