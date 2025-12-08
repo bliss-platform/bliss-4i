@@ -5,3 +5,6 @@ plugins:
 
 title: Bliss Docs
 favicon_ico: "/bliss_fav.ico"
+just_the_docs:
+  exclude:
+    - 'README.md'

@@ -11,6 +11,8 @@ Date: 8 December 2025
 ## 1. Introduction
 The Bliss Platform requires unified diagnostic logging across all official tools including the runtime, compiler, packager, VM, assembler, and bootstrap scripts. This specification defines a strict, machine-parseable, human-friendly logging format. Logs represent serious diagnostic states: errors, warnings, and structured success messages. Normal program output MUST NOT be considered a log.
 
+---
+
 ## 2. Axioms of Logging in Bliss
 A log is a structured diagnostic emitted by Bliss tools. User programs may write to stderr, but only Bliss tools emit official logs. Logs follow a fixed multi-line structure and are colorized when printed to ANSI-capable terminals.
 
@@ -27,6 +29,7 @@ Example:
 Invalid bytecode
 The bytecode being processed is malformed and cannot be executed further.
 ```
+---
 
 ## 3. Log Header Specification
 Header format:
@@ -58,6 +61,8 @@ Where:
 
 Examples: `4RT006`, `4CP110`, `4PK041`
 
+---
+
 ## 4. Full Structured Log Format
 A valid Bliss log contains:
 
@@ -72,6 +77,8 @@ Unused variable
 The variable 'result' is never read after assignment.
 ```
 
+---
+
 ## 5. Success and Completion Logs
 Success messages are **not diagnostic logs**.
 
@@ -85,6 +92,8 @@ Examples:
 [DONE] Build completed
 [DONE] Package installed successfully
 ```
+
+---
 
 ## 6. Color Guidance (ANSI)
 
@@ -109,12 +118,16 @@ inspired by Nord/Catppuccin/JetBrains styling.
 
 ![Sample Log Screenshot](../assets/logger.png)
 
+---
+
 ## 7. Separation of Logs and Output
 - Logs appear only for warnings and errors.  
 - Success messages use `[DONE]`.  
 - User output MUST NOT be treated as logs.  
 - Spoofing is theoretically possible but practically rare and governed by ecosystem policy.  
 - Tools MUST treat official logs as coming from Bliss tools only.
+
+---
 
 ## 8. Examples
 ```
@@ -134,3 +147,5 @@ The instruction 'mov8' is deprecated and replaced by 'mv8'.
 ```
 
 End of Specification.
+
+---
