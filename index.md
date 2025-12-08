@@ -12,12 +12,15 @@ This iteration introduces a stable, opinionated toolchain, a refined package man
 
 Bliss 4i is the first iteration intended for real public usage, open-source contribution, ecosystem growth, and long-term maintainability.
 
+This website contains all the documents, specifications, articles and thought-process files that are relevant to the 4i platform version.
+
 ---
 
 ## Table of Contents
 
-### 1. [Articles](/articles) with day-to-day additions and specifications
+- [Articles](/articles) with day-to-day additions and specifications
 
-### 2. [Packager](/packager) with all documents related to the packaged, including tutorials and specifications
+- [Packager](/packager) with all documents related to the packaged, including tutorials and specifications
 
 ---
+
