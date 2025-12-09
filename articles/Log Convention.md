@@ -18,14 +18,14 @@ A log is a structured diagnostic emitted by Bliss tools. User programs may write
 
 General format:
 ```
-[TARGET::LEVEL] CODE
+CODE [TARGET::LEVEL]
 Title
 Description
 ```
 
 Example:
 ```
-[RUNTIME::ERROR] 4RT006
+4RT006 [RUNTIME::ERROR]
 Invalid bytecode
 The bytecode being processed is malformed and cannot be executed further.
 ```
@@ -34,7 +34,7 @@ The bytecode being processed is malformed and cannot be executed further.
 ## 3. Log Header Specification
 Header format:
 ```
-[TARGET::LEVEL] CODE
+CODE [TARGET::LEVEL]
 ```
 
 **TARGET** — Name of the subsystem producing the log. Valid targets:
@@ -56,23 +56,23 @@ N<PLATFORM><ID>
 
 Where:
 - **N** = Bliss iteration major number (4 for bliss-4i)  
-- **PLATFORM** = Two-letter subsystem code: RT, CP, PK, SH  
+- **PLATFORM** = Two-letter subsystem code: RT, CP, PM, SH  
 - **ID** = Three-digit identifier  
 
-Examples: `4RT006`, `4CP110`, `4PK041`
+Examples: `4RT006`, `4CP110`, `4PM041`
 
 ---
 
 ## 4. Full Structured Log Format
 A valid Bliss log contains:
 
-Line 1: `[TARGET::LEVEL] CODE`  
+Line 1: ` CODE [TARGET::LEVEL]`  
 Line 2: **Title** — one-line summary  
 Line 3+: **Description** — detailed explanation  
 
 Example:
 ```
-[COMPILER::WARN] 4CP042
+4CP042 [COMPILER::WARN]
 Unused variable
 The variable 'result' is never read after assignment.
 ```
@@ -84,13 +84,13 @@ Success messages are **not diagnostic logs**.
 
 Format:
 ```
-[DONE] Message
+[TARGET::DONE] Message
 ```
 
 Examples:
 ```
-[DONE] Build completed
-[DONE] Package installed successfully
+[PACKAGER::DONE] Build completed
+[PACKAGER::DONE] Package installed successfully
 ```
 
 ---
@@ -122,7 +122,7 @@ inspired by Nord/Catppuccin/JetBrains styling.
 
 ## 7. Separation of Logs and Output
 - Logs appear only for warnings and errors.  
-- Success messages use `[DONE]`.  
+- Success messages use `[TARGET::DONE]`.  
 - User output MUST NOT be treated as logs.  
 - Spoofing is theoretically possible but practically rare and governed by ecosystem policy.  
 - Tools MUST treat official logs as coming from Bliss tools only.
@@ -131,19 +131,19 @@ inspired by Nord/Catppuccin/JetBrains styling.
 
 ## 8. Examples
 ```
-[PACKAGER::ERROR] 4PK020
+4PM020 [PACKAGER::ERROR]
 Failed to resolve package
 Package 'std@1.x.x@4i' could not be resolved via any configured registry profile.
 ```
 
 ```
-[RUNTIME::WARN] 4RT102
+4RT102 [RUNTIME::WARN]
 Deprecated instruction
 The instruction 'mov8' is deprecated and replaced by 'mv8'.
 ```
 
 ```
-[DONE] Compilation completed successfully
+[COMPILER::DONE] Compilation completed successfully
 ```
 
 End of Specification.

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:packager/logger.dart';
 import 'package:path/path.dart' as path;
 
 enum CreateTypes {
@@ -14,14 +16,16 @@ void create( String name, CreateTypes type ) {
 	final directory = Directory( path.join( Directory.current.path, name ) );
 
 	if ( directory.existsSync() ) {
-		print("[ERROR] The directory $name already exists.\nAborting create command");
+		logger(LogType.error, "011", "Project Creation Failed", "The directory $name already exists.\nAborting create command");
 		return;
 	}
 
 	//if the directory do not exist
 	try {
+
 		directory.createSync(recursive: true);
-		print("[SUCCESS] Created project $name");
+		logger(LogType.done, "", "Project $name created successfully", "");
+
 	} catch(e) {
 		print("[ERROR] Unable to create the project.\n${e.toString()}");
 	}
