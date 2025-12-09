@@ -20,7 +20,7 @@ This website contains all the documents, specifications, articles and thought-pr
 
 - [Articles](articles) with day-to-day additions and specifications
 
-- [Packager](packager) with all documents related to the packaged, including tutorials and specifications
+- [Packager](products/packager) with all documents related to the packaged, including tutorials and specifications
 
 ---
 
