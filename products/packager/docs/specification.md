@@ -166,7 +166,7 @@ This makes the dependency entry act as both the version requirement and the lock
 ## Dependency Entry Format
 
 ```toml
-package_name = [ current_version, scheme ]
+package_name = [ "current_version", "scheme" ]
 ```
 
 Example:
@@ -271,7 +271,7 @@ Build and run operations are handled by the global `bliss` script, which orchest
 Creates:
 
 ```toml
-dep_name = [ current_version, scheme ]
+dep_name = [ "current_version", "scheme" ]
 ```
 
 Added to `[packages]` by default, or under a profile if specified.
