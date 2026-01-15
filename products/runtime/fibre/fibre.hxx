@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <cstdlib>
 
-typedef union Register Register;
 union Register {
 	uint64_t u64;
 	uint32_t u32;
@@ -21,39 +20,33 @@ union Register {
 };
 
 enum RegisterID {
-	R1,R2,ROUT
+	R1,R2, ROUT, __COUNT__
 };
 
-typedef struct Fibre Fibre;
+enum FibreStatus {
+	ACTIVE, WAITING
+};
+
 struct Fibre {
-	Register registers[3];
+	
+	Register registers[RegisterID::__COUNT__];
 	uint64_t RPC;
+	uint32_t id;
 	uint8_t flag; //used by boolean operators.
+	FibreStatus status;
 	
-	static Fibre *init() {
-		return (Fibre*)calloc( 1, sizeof( Fibre ) );
-	}
+	static Fibre *init();
+	static void drop(Fibre* fibre);
 	
-	static void drop(Fibre* fibre) {
-		free(fibre);
-	}
 };
 
-typedef struct FibreNode FibreNode;
 struct FibreNode {
-	Fibre *root;
-	Fibre *next;
-	Fibre *prev;
+	Fibre *node;
+	FibreNode *next;
+	FibreNode *prev;
 	
-	static FibreNode *init(Fibre *root) {
-		FibreNode *list = (FibreNode*)calloc( 1, sizeof( FibreNode ) );
-		list->root = root;
-		return list;
-	}
-	
-	static void drop(FibreNode *node) {
-		free(node);
-	}
+	static FibreNode *init(Fibre *root);
+	static void drop(FibreNode *node);
 };
 
 #endif

@@ -1,8 +1,21 @@
 #ifndef WATERFALL_ENGINE
 #define WATERFALL_ENGINE
 
-#include "../fibre/fibre.hxx"
+#include "../factory/factory.hxx"
+#include <cstdlib>
 
-void run( FibreNode* head, uint64_t *instructions );
+struct RunnerState {
+	Factory *factory;
+	Worker *worker;
+	
+	static RunnerState *init(Factory* factory, Worker *worker) {
+		RunnerState *state = (RunnerState *)calloc(1, sizeof( RunnerState ));
+		state->factory = factory;
+		state->worker = worker;
+		return state;
+	}
+};
+
+void run( RunnerState *state );
 
 #endif

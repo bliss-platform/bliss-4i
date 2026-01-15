@@ -54,14 +54,16 @@ enum OPCODES {
 	// [ <x>c<y> ][ padding ] basically meaning <x> convert to <y>.
 	// i = integer (i32), f = float (f32), d = double (f64), l = long (i64)
 	// conditional jump, pure jump, system call
-	jif, jmp, scall,
+	jif, jifn, jmp, scall,
 	// [ jif/jmp/scall ][ padding ][ address ]
 	// [ ret ][ padding ]
 	
 	// yields, i.e switches to a new fibre, and launch = launch a new lightweight thread
-	yield, launch,
+	yield, launch, launch_worker,
 	// [ yield/launch ] [ padding ]
-		
+	sendmsg, //sends a message to a worker via worker ID and an address to the memory (pointer)
+	readmsg, //reads the first message from the worker mailbox pool
+	
 	// equality is type agnostic
 	eq,
 	// less than equal to needs type, R1 <= R2 is done
@@ -97,8 +99,8 @@ enum OPCODES {
 	// load data to heap -> register
 	load, fload,
 	//program end
-	inspect,
-	pend
+	inspect, //this is only for developer mode.
+	exitf
 	
 };
 

@@ -1,5 +1,5 @@
 CXX = clang++-20
-SOURCES = main.cpp engine/engine.cpp
+SOURCES = main.cpp engine/engine.cpp fibre/fibre.cpp factory/factory.cpp factory/worker.cpp 
 FLAGS = -std=c++20 -stdlib=libc++
 
 debug: $(SOURCES)

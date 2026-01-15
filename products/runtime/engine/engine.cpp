@@ -3,6 +3,7 @@
 #include "opcode.hxx"
 #include <cstdint>
 #include <bit>
+#include "state.hxx"
 
 void dump(Fibre* f) {
     LOG("=== Fibre @ ===\n");
@@ -57,27 +58,33 @@ void fetch(uint64_t left, uint64_t right, uint16_t& opcode, uint16_t& val1, uint
 	
 }
 
-void run(FibreNode *head, uint64_t *instructions) {
+void run(RunnerState *state) {
 	
 	//runs the opcodes here
 	uint16_t opcode;
 	uint16_t val1;
 	uint32_t val2;
 	uint64_t val3;
-	Fibre *fibre = head->root;
+	Fibre *fibre = state->worker->fibres->node;
+	FibreNode *current = state->worker->fibres;
 	
-	while( opcode != pend ) {
+	while(true) {
 
 		fetch(
-			instructions[ fibre->RPC ], 
-			instructions[ fibre->RPC + 1 ], 
+			state->factory->instructions[ fibre->RPC ], 
+			state->factory->instructions[ fibre->RPC + 1 ], 
 			opcode, val1, val2, val3
 		);
 		
 		fibre->RPC += 2;
 		
-		switch (opcode) {
+		if ( fibre->status == FibreStatus::WAITING ) {
+			fibre = current->next->node;
+			current = current->next;
+			continue; //for re-fetch basically.
+		}
 		
+		switch (opcode) {
 			//classic register arithmetic here
 			case OPCODES::iadd: {
 				LOG("iadd is being called\n");
@@ -100,7 +107,7 @@ void run(FibreNode *head, uint64_t *instructions) {
 				}
 				break;
 			}
-			
+			///////////////////////////////////
 			case OPCODES::uadd: {
 				fibre->registers[RegisterID::ROUT].u64 = fibre->registers[RegisterID::R1].u64 + fibre->registers[RegisterID::R2].u64;
 				break;
@@ -121,7 +128,7 @@ void run(FibreNode *head, uint64_t *instructions) {
 				}
 				break;
 			}
-			
+			/////////////////////////////////
 			case OPCODES::fadd: {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 + fibre->registers[RegisterID::R2].f32;
 				break;
@@ -138,7 +145,7 @@ void run(FibreNode *head, uint64_t *instructions) {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 / fibre->registers[RegisterID::R2].f32;
 				break;
 			}
-			
+			//////////////////////////////////
 			case OPCODES::dadd: {
 				fibre->registers[RegisterID::ROUT].f64 = fibre->registers[RegisterID::R1].f64 + fibre->registers[RegisterID::R2].f64;
 				break;
@@ -331,23 +338,56 @@ void run(FibreNode *head, uint64_t *instructions) {
 				break;
 			}
 			
+			case OPCODES::jifn: {
+				if ( fibre->flag == 0 ) {
+					fibre->RPC =  val3;
+					fibre->flag = 0;
+				}
+				break;
+			}
+			
 			case OPCODES::jmp: {
 				fibre->RPC = val3;
 				break;
 			}
 			
 			case OPCODES::scall: {
-				//TODO
+				if ( val3+1 > state->factory->tray->length ) {
+					LOG("DEBUG::ERROR -> INVALID SYSCALL INDEX\n");
+				} else {
+					state->factory->tray->functions[val3](fibre);
+				}
 				break;
 			}
 			
 			case OPCODES::yield: {
-				//TODO
+				//okay, yield switches the fibre itself, nothing else.
+				fibre = current->next->node;
+				current = current->next;
 				break;
 			}
 			
 			case OPCODES::launch: {
 				//TODO
+				//The launch opcode is obvious - it launches a new fibre (not worker) in the current fibre pool with
+				//the PC register being set to whatever the 8 byte value is.
+				Fibre *fib = Fibre::init();
+				fib->RPC = val3; //because this is the actual address.
+				
+				Worker::addFibre(state->worker, fib);
+				
+				break;
+			}
+			
+			case OPCODES::launch_worker: {
+				break;
+			}
+			
+			case OPCODES::sendmsg: {
+				break;
+			}
+			
+			case OPCODES::readmsg: {
 				break;
 			}
 			
@@ -355,6 +395,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( fibre->registers[RegisterID::R1].u64 == fibre->registers[RegisterID::R2].u64 ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -365,6 +407,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( std::bit_cast<int64_t>(fibre->registers[RegisterID::R1].u64) <= std::bit_cast<int64_t>(fibre->registers[RegisterID::R1].u64) ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -375,6 +419,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( fibre->registers[RegisterID::R1].u64 <= fibre->registers[RegisterID::R2].u64 ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -388,6 +434,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( left <= right ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -401,6 +449,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( left <= right ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -411,6 +461,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( std::bit_cast<int64_t>(fibre->registers[RegisterID::R1].u64) < std::bit_cast<int64_t>(fibre->registers[RegisterID::R1].u64) ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -421,6 +473,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( fibre->registers[RegisterID::R1].u64 < fibre->registers[RegisterID::R2].u64 ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -434,6 +488,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( left < right ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -447,6 +503,8 @@ void run(FibreNode *head, uint64_t *instructions) {
 				
 				if ( left < right ) {
 					fibre->flag = 1;
+				} else {
+					fibre->flag = 0;
 				}
 				
 				break;
@@ -565,10 +623,33 @@ void run(FibreNode *head, uint64_t *instructions) {
 				break;
 			}
 			
-			case OPCODES::pend: {
-				return;
-			}
-			
+			case OPCODES::exitf: {
+				//exits the fibre
+				if ( current->next == current && current->prev == current ) {
+					//yeah we are at the same node basically.
+					current->next = nullptr;
+					current->prev = nullptr;
+					Fibre::drop(current->node);
+					FibreNode::drop(current);
+					return;
+				}
+				
+				//else
+				//rewire the next and previous terms basically.
+				current->prev->next = current->next;
+				current->next->prev = current->prev;
+				
+				FibreNode *flush = current;
+				current = current->next;
+				fibre = current->node;
+	
+				flush->next = nullptr;
+				flush->prev = nullptr;
+				Fibre::drop(flush->node);
+				FibreNode::drop(flush);
+				
+				break;
+			}	
 		}
 		
 	}
