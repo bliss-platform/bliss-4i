@@ -17,8 +17,4 @@ struct SFXTray {
 	}
 };
 
-struct RTState {
-	SFXTray *tray;
-}; //each thread gets a RTState.
-
 #endif

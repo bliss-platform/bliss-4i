@@ -16,6 +16,6 @@ struct RunnerState {
 	}
 };
 
-void run( RunnerState *state );
+void *run( void *args );
 
 #endif

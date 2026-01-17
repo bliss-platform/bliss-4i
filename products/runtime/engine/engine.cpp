@@ -1,5 +1,5 @@
 #include "engine.hxx"
-#include "../debug.hxx"
+#include "../utility/debug.hxx"
 #include "opcode.hxx"
 #include <cstdint>
 #include <bit>
@@ -58,15 +58,16 @@ void fetch(uint64_t left, uint64_t right, uint16_t& opcode, uint16_t& val1, uint
 	
 }
 
-void run(RunnerState *state) {
-	
+void *run(void *args) {
+
+	RunnerState *state = static_cast<RunnerState *>(args);
 	//runs the opcodes here
 	uint16_t opcode;
 	uint16_t val1;
 	uint32_t val2;
 	uint64_t val3;
 	Fibre *fibre = state->worker->fibres->node;
-	FibreNode *current = state->worker->fibres;
+	CDLLWrapper<Fibre> *current = state->worker->fibres;
 	
 	while(true) {
 
@@ -380,6 +381,17 @@ void run(RunnerState *state) {
 			}
 			
 			case OPCODES::launch_worker: {
+				//this is basically creating a new worker and an active fibre
+				//in that.
+				
+				//val3 = address on the instruction space
+				
+				Worker *worker = Worker::init();
+				Fibre *fib = Fibre::init();
+				fib->RPC = val3;
+				Worker::addFibre(worker, fib);
+				Factory::spawnWorker(state->factory, worker);
+				
 				break;
 			}
 			
@@ -630,8 +642,8 @@ void run(RunnerState *state) {
 					current->next = nullptr;
 					current->prev = nullptr;
 					Fibre::drop(current->node);
-					FibreNode::drop(current);
-					return;
+					CDLLWrapper<Fibre>::drop(current);
+					return nullptr;
 				}
 				
 				//else
@@ -639,14 +651,14 @@ void run(RunnerState *state) {
 				current->prev->next = current->next;
 				current->next->prev = current->prev;
 				
-				FibreNode *flush = current;
+				CDLLWrapper<Fibre> *flush = current;
 				current = current->next;
 				fibre = current->node;
 	
 				flush->next = nullptr;
 				flush->prev = nullptr;
 				Fibre::drop(flush->node);
-				FibreNode::drop(flush);
+				CDLLWrapper<Fibre>::drop(flush);
 				
 				break;
 			}	

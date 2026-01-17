@@ -40,13 +40,4 @@ struct Fibre {
 	
 };
 
-struct FibreNode {
-	Fibre *node;
-	FibreNode *next;
-	FibreNode *prev;
-	
-	static FibreNode *init(Fibre *root);
-	static void drop(FibreNode *node);
-};
-
 #endif

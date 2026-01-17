@@ -1,10 +1,9 @@
-#include "engine/engine.hxx"
 #include "engine/opcode.hxx"
 #include "engine/state.hxx"
-#include "factory/factory.hxx"
-#include "factory/worker.hxx"
 #include "fibre/fibre.hxx"
-#include "debug.hxx"
+#include "./utility/debug.hxx"
+#include "vminit/vminit.hxx"
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
 
@@ -22,21 +21,11 @@ void fibre2(Fibre *f) {
 
 int main() {
 	
-	Fibre *fib = Fibre::init();
-	FibreNode *head = FibreNode::init(fib);
-	
-	//these are virtual registers
-	fib->registers[RegisterID::R1].u64 = 5;
-	fib->registers[RegisterID::R2].u64 = 0;
-	
 	SFXTray *tray = SFXTray::init();
 	tray->functions = (void(**)(Fibre *f))malloc( sizeof( void(**)(Fibre *f) ) * 2 );
 	tray->functions[0] = &fibre1;
 	tray->functions[1] = &fibre2;
 	tray->length+=2;
-	
-	RTState *state = (RTState *)calloc(1, sizeof(RTState));
-	state->tray = tray;
 	
 	uint64_t instructions[] = {
 		(uint64_t)OPCODES::launch << 48, 14, //0
@@ -54,19 +43,12 @@ int main() {
 		(uint64_t)yield << 48, 0,
 		(uint64_t)uxsub << 48 | (uint64_t) RegisterID::R2 << 32, 1,
 		(uint64_t)eq << 48, 0,
-		(uint64_t)jifn << 48, 16, 
+		(uint64_t)jifn << 48, 16,
 		(uint64_t)exitf << 48, 0
 	};
+
+	start(tray, NULL, instructions);
 	
-	Worker *worker = Worker::init();
-	Worker::addFibre(worker, fib);
-	
-	RunnerState *app_state = RunnerState::init(
-		Factory::init(tray, nullptr, instructions),
-		worker
-	);
-	
-	run(app_state);
 	return 0;
 	
 }

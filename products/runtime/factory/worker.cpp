@@ -1,5 +1,7 @@
 #include "worker.hxx"
-#include <cstdlib>
+#include "../engine/engine.hxx"
+#include "../utility/os_thread.hxx"
+#include "../utility/debug.hxx"
 
 Worker *Worker::init() {
 	
@@ -13,11 +15,11 @@ void Worker::addFibre(Worker *worker, Fibre *fibre) {
 	
 	if ( worker->fibres == nullptr ) {
 	
-		worker->fibres = FibreNode::init(fibre);
+		worker->fibres = CDLLWrapper<Fibre>::init(fibre);
 	
 	} else {
 		
-		FibreNode *node = FibreNode::init(fibre);
+		CDLLWrapper<Fibre> *node = CDLLWrapper<Fibre>::init(fibre);
 		//now it will be inserted between the existing node
 		//and it's right node.
 		
@@ -29,5 +31,17 @@ void Worker::addFibre(Worker *worker, Fibre *fibre) {
 		
 		//node added successfully
 	}
+	
+}
+
+void Worker::execute(Worker *worker, Factory *factory) {
+
+	//create the state to start.
+	RunnerState *workerState = RunnerState::init(
+		factory,
+		worker
+	);
+	
+	worker->thread = createThread<RunnerState>(&run, workerState);
 	
 }
