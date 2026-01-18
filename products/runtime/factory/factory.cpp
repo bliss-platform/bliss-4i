@@ -36,7 +36,5 @@ void Factory::spawnWorker(Factory *factory, Worker *worker) {
 }
 
 void Factory::drop(Factory *factory) {
-	
 	free(factory);
-	
 }

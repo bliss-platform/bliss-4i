@@ -1,10 +1,9 @@
 #include "engine.hxx"
 #include "../utility/debug.hxx"
 #include "opcode.hxx"
-#include <cstdint>
 #include <bit>
+#include <cstdint>
 #include <pthread.h>
-#include "state.hxx"
 
 void dump(Fibre* f) {
     LOG("=== Fibre @ ===\n");
@@ -88,20 +87,20 @@ void *run(void *args) {
 		
 		switch (opcode) {
 			//classic register arithmetic here
-			case OPCODES::iadd: {
+			case OPCODES::iradd: {
 				LOG("iadd is being called\n");
 				fibre->registers[RegisterID::ROUT].i64 = fibre->registers[RegisterID::R1].i64 + fibre->registers[RegisterID::R2].i64;
 				break;
 			}
-			case OPCODES::isub: {
+			case OPCODES::irsub: {
 				fibre->registers[RegisterID::ROUT].i64 = fibre->registers[RegisterID::R1].i64 - fibre->registers[RegisterID::R2].i64;
 				break;
 			}
-			case OPCODES::imul: {
+			case OPCODES::irmul: {
 				fibre->registers[RegisterID::ROUT].i64 = fibre->registers[RegisterID::R1].i64 * fibre->registers[RegisterID::R2].i64;
 				break;
 			}
-			case OPCODES::idiv: {
+			case OPCODES::irdiv: {
 				if ( fibre->registers[RegisterID::R2].i64 != 0 ) {
 					fibre->registers[RegisterID::ROUT].i64 = fibre->registers[RegisterID::R1].i64 / fibre->registers[RegisterID::R2].i64;
 				} else {
@@ -110,19 +109,19 @@ void *run(void *args) {
 				break;
 			}
 			///////////////////////////////////
-			case OPCODES::uadd: {
+			case OPCODES::uradd: {
 				fibre->registers[RegisterID::ROUT].u64 = fibre->registers[RegisterID::R1].u64 + fibre->registers[RegisterID::R2].u64;
 				break;
 			}
-			case OPCODES::usub: {
+			case OPCODES::ursub: {
 				fibre->registers[RegisterID::ROUT].u64 = fibre->registers[RegisterID::R1].u64 - fibre->registers[RegisterID::R2].u64;
 				break;
 			}
-			case OPCODES::umul: {
+			case OPCODES::urmul: {
 				fibre->registers[RegisterID::ROUT].u64 = fibre->registers[RegisterID::R1].u64 * fibre->registers[RegisterID::R2].u64;
 				break;
 			}
-			case OPCODES::udiv: {
+			case OPCODES::urdiv: {
 				if ( fibre->registers[RegisterID::R2].u64 != 0 ) {
 					fibre->registers[RegisterID::ROUT].u64 = fibre->registers[RegisterID::R1].u64 / fibre->registers[RegisterID::R2].u64;
 				} else {
@@ -131,36 +130,36 @@ void *run(void *args) {
 				break;
 			}
 			/////////////////////////////////
-			case OPCODES::fadd: {
+			case OPCODES::fradd: {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 + fibre->registers[RegisterID::R2].f32;
 				break;
 			}
-			case OPCODES::fsub: {
+			case OPCODES::frsub: {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 - fibre->registers[RegisterID::R2].f32;
 				break;
 			}
-			case OPCODES::fmul: {
+			case OPCODES::frmul: {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 * fibre->registers[RegisterID::R2].f32;
 				break;
 			}
-			case OPCODES::fdiv: {
+			case OPCODES::frdiv: {
 				fibre->registers[RegisterID::ROUT].f32 = fibre->registers[RegisterID::R1].f32 / fibre->registers[RegisterID::R2].f32;
 				break;
 			}
 			//////////////////////////////////
-			case OPCODES::dadd: {
+			case OPCODES::dradd: {
 				fibre->registers[RegisterID::ROUT].f64 = fibre->registers[RegisterID::R1].f64 + fibre->registers[RegisterID::R2].f64;
 				break;
 			}
-			case OPCODES::dsub: {
+			case OPCODES::drsub: {
 				fibre->registers[RegisterID::ROUT].f64 = fibre->registers[RegisterID::R1].f64 - fibre->registers[RegisterID::R2].f64;
 				break;
 			}
-			case OPCODES::dmul: {
+			case OPCODES::drmul: {
 				fibre->registers[RegisterID::ROUT].f64 = fibre->registers[RegisterID::R1].u64 * fibre->registers[RegisterID::R2].f64;
 				break;
 			}
-			case OPCODES::ddiv: {
+			case OPCODES::drdiv: {
 				fibre->registers[RegisterID::ROUT].f64 = fibre->registers[RegisterID::R1].f64 / fibre->registers[RegisterID::R2].f64;
 				break;
 			}
@@ -397,10 +396,15 @@ void *run(void *args) {
 			}
 			
 			case OPCODES::sendmsg: {
+				//COPY from VM memory
+				//to a message and transfer ownership to a said worker
+				//and now you can free it however you want.
 				break;
 			}
 			
 			case OPCODES::readmsg: {
+				//COPY from the message
+				//drop the message and rearrange the linked list
 				break;
 			}
 			

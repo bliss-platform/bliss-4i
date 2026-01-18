@@ -2,14 +2,18 @@
 #include "../engine/engine.hxx"
 #include "../utility/os_thread.hxx"
 #include "../utility/debug.hxx"
-#include <cstddef>
+#include "message.hxx"
 #include <cstdlib>
+#include <pthread.h>
 
 Worker *Worker::init() {
 	
 	//for now, we will do simple allocations only.
 	//TODO: Impement this even better.
-	return (Worker*)calloc(1, sizeof(Worker));
+	Worker *worker = (Worker*)calloc(1, sizeof(Worker));
+	worker->mailbox_tail = nullptr;
+	worker->mailbox_head = nullptr;
+	return worker;
 	
 }
 
@@ -52,4 +56,18 @@ void Worker::execute(Worker *worker, Factory *factory) {
 
 void Worker::drop(Worker *worker) {
 	free(worker);
+}
+
+void Worker::putmsg(Message *msg, Factory* factory, Worker *worker) {
+
+	pthread_mutex_lock(&factory->mutex);
+	LLWrapper<Message> *node = LLWrapper<Message>::init(msg);
+	
+	if ( worker->mailbox_tail != nullptr ) {
+		worker->mailbox_tail->next = node;
+	}
+	
+	worker->mailbox_tail = node;
+	pthread_mutex_unlock(&factory->mutex);
+
 }

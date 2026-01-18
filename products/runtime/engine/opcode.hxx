@@ -25,10 +25,10 @@ enum OPCODES {
 	
 	//mathematics on different numeric values.
 	//basically ROUT = R1 ops R2, ops = addition, subtraction etc.
-	iadd, uadd, fadd, dadd,
-	isub, usub, fsub, dsub,
-	imul, umul, fmul, dmul,
-	idiv, udiv, fdiv, ddiv,
+	iradd, uradd, fradd, dradd,
+	irsub, ursub, frsub, drsub,
+	irmul, urmul, frmul, drmul,
+	irdiv, urdiv, frdiv, drdiv,
 	// [ <t>ops ][ ... padding ]
 	
 	//these are inline math ops. so you provide the value inline
@@ -61,7 +61,7 @@ enum OPCODES {
 	// yields, i.e switches to a new fibre, and launch = launch a new lightweight thread
 	yield, launch, launch_worker,
 	// [ yield/launch ] [ padding ]
-	sendmsg, //sends a message to a worker via worker ID and an address to the memory (pointer)
+	sendmsg, //R1 = message pointer, R2 = worker ID. MSG will assume structure of [ 32 bit size of message ][ ptr_to_raw_data (64 bit) ];
 	readmsg, //reads the first message from the worker mailbox pool
 	
 	// equality is type agnostic

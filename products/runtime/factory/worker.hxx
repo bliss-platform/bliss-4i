@@ -2,7 +2,9 @@
 #define RUNTIME_WORKER
 
 #include "../utility/cdll_wrapper.hxx"
+#include "../utility/llwrapper.hxx"
 #include "../fibre/fibre.hxx"
+#include "message.hxx"
 #include <cstdint>
 
 //forward declaration
@@ -12,6 +14,8 @@ struct Worker {
 	
 	uint32_t id; //a worker needs an ID to even work.
 	CDLLWrapper<Fibre> *fibres;
+	LLWrapper<Message> *mailbox_head;
+	LLWrapper<Message> *mailbox_tail;
 	void *memory; //boring old memory. to be used by custom allocators ofc.
 	
 	static Worker *init();
@@ -19,6 +23,7 @@ struct Worker {
 	static void drop(Worker *worker);
 	static void execute(Worker *worker,  Factory *factory);
 	static void terminate(Worker *worker);
+	static void putmsg(Message *msg, Factory *factory, Worker *worker);
 	
 };
 
