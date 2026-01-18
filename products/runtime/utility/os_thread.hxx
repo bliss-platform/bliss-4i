@@ -2,7 +2,8 @@
 #define __OS_THREAD__
 	
 #include <cstdlib>
-#ifndef _WIN32
+
+	#ifndef _WIN32
 		#include <pthread.h>
 		using Thread = pthread_t; //for linux
 	#else
