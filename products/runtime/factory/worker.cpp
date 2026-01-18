@@ -43,5 +43,5 @@ void Worker::execute(Worker *worker, Factory *factory) {
 	);
 	
 	worker->thread = createThread<RunnerState>(&run, workerState);
-	
+
 }

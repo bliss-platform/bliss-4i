@@ -14,7 +14,7 @@ struct Worker {
 	uint32_t id; //a worker needs an ID to even work.
 	CDLLWrapper<Fibre> *fibres;
 	void *memory; //boring old memory. to be used by custom allocators ofc.
-	Thread thread; //the thread ID. 
+	Thread *thread; //the thread ID. 
 	
 	static Worker *init();
 	static void addFibre(Worker *worker, Fibre *fibre);

@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 struct RunnerState {
-	Factory *factory;
+	Factory *factory; //this is like the global data pointer here.
 	Worker *worker;
 	
 	static RunnerState *init(Factory* factory, Worker *worker) {

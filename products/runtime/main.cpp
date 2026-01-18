@@ -6,17 +6,18 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <sys/types.h>
 
 void test(Fibre *f) {
 	LOG("Hello World System Call\n");
 }
 
 void fibre1(Fibre *f) {
-	LOG("Fibre @1\n");
+	LOG("Fibre @1 -- First Fibre\n");
 }
 
 void fibre2(Fibre *f) {
-	LOG("Fibre @2\n");
+	LOG("Fibre @2 -- Second Fibre\n");
 }
 
 int main() {
@@ -27,7 +28,7 @@ int main() {
 	tray->functions[1] = &fibre2;
 	tray->length+=2;
 	
-	uint64_t instructions[] = {
+	uint64_t* instructions = new uint64_t[]{
 		(uint64_t)OPCODES::launch << 48, 14, //0
 		//fibre1
 		(uint64_t)yield << 48, 0, //2
@@ -47,8 +48,7 @@ int main() {
 		(uint64_t)exitf << 48, 0
 	};
 
-	start(tray, NULL, instructions);
-	
+	start(tray, nullptr, instructions);
 	return 0;
 	
 }
