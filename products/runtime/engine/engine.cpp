@@ -643,6 +643,8 @@ void *run(void *args) {
 					current->prev = nullptr;
 					Fibre::drop(current->node);
 					CDLLWrapper<Fibre>::drop(current);
+					//drop the other stuff as well.
+					//since this is responsible for only dropping the worker
 					return nullptr;
 				}
 				
