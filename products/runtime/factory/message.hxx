@@ -1,5 +1,5 @@
-#ifndef WORKER_MESSAGE
-#define WORKER_MESSAGE
+#ifndef RUNTIME_MESSAGE
+#define RUNTIME_MESSAGE
 
 #include <cstdint>
 #include <span>

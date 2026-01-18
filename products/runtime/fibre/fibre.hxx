@@ -1,5 +1,5 @@
-#ifndef FIBRE
-#define FIBRE
+#ifndef RUNTIME_FIBRE
+#define RUNTIME_FIBRE
 
 #include <cstdint>
 #include <cstdlib>

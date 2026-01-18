@@ -1,5 +1,5 @@
-#ifndef OPCODE
-#define OPCODE
+#ifndef RUNTIME_OPCODE
+#define RUNTIME_OPCODE
 
 /*
  * Fixed Size, 128-bit instruction pointers

@@ -1,5 +1,6 @@
 #include "factory.hxx"
 #include "worker.hxx"
+#include <pthread.h>
 #include <cstdlib>
 
 Factory *Factory::init( SFXTray *tray, Constant* pool, uint64_t* instruction ) {
@@ -8,6 +9,7 @@ Factory *Factory::init( SFXTray *tray, Constant* pool, uint64_t* instruction ) {
 	factory->constantPool = pool;
 	factory->instructions = instruction;
 	factory->tray = tray;
+	factory->mutex = PTHREAD_MUTEX_INITIALIZER;
 	
 	return factory;
 	
@@ -30,5 +32,11 @@ void Factory::spawnWorker(Factory *factory, Worker *worker) {
 		factory->workers->next = node;
 	
 	}
+	
+}
+
+void Factory::drop(Factory *factory) {
+	
+	free(factory);
 	
 }

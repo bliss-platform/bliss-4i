@@ -1,5 +1,5 @@
-#ifndef WATERFALL_ENGINE
-#define WATERFALL_ENGINE
+#ifndef RUNTIME_ENGINE
+#define RUNTIME_ENGINE
 
 #include "../factory/factory.hxx"
 #include <cstdlib>
@@ -13,6 +13,12 @@ struct RunnerState {
 		state->factory = factory;
 		state->worker = worker;
 		return state;
+	}
+	
+	static void drop(RunnerState *state) {
+		state->factory = nullptr;
+		state->worker = nullptr;
+		free(state);
 	}
 };
 

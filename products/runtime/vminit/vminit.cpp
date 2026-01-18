@@ -20,4 +20,10 @@ void start(SFXTray *tray, Constant *pool, uint64_t* instruction) {
 	//start the execution
 	Worker::execute(worker_main, factory);
 	
+	SFXTray::drop(tray);
+	free(instruction);
+	Constant::drop(pool);
+	
+	Factory::drop(factory);
+	
 }

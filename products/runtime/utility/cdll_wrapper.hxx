@@ -3,8 +3,8 @@
  * and more.
  */
 
-#ifndef __CDLLWrapper__
-#define __CDLLWrapper__
+#ifndef RUNTIME_UTILITY_CDLLWRAPPER
+#define RUNTIME_UTILITY_CDLLWRAPPER
 #include <cstdlib>
 
 template<typename T>

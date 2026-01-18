@@ -1,5 +1,5 @@
-#ifndef __OS_THREAD__
-#define __OS_THREAD__
+#ifndef RUNTIME_UTILITY_OS_THREAD
+#define RUNTIME_UTILITY_OS_THREAD
 	
 #include <cstdlib>
 
@@ -11,15 +11,11 @@
 	#endif
 	
 	template<typename Arg>
-	Thread *createThread(void *(*start_routine)(void *), Arg *arg) {
-			
-		Thread *id = (Thread *)malloc( sizeof(Thread) );
+	void createThread(void *(*start_routine)(void *), Arg *arg, Thread *id) {
 		
 		#ifndef _WIN32
 			//linux platform
 			pthread_create(id, NULL, start_routine, arg);
-			pthread_join(*id, NULL);
-			return id; 
 			
 		#endif
 			

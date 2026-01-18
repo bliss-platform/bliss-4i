@@ -1,5 +1,5 @@
-#ifndef RT_STATE
-#define RT_STATE
+#ifndef RUNTIME_STATE
+#define RUNTIME_STATE
 
 #include "../fibre/fibre.hxx"
 #include <cstdlib>
@@ -13,6 +13,7 @@ struct SFXTray {
 	}
 	
 	static void drop(SFXTray* tray) {
+		free(tray->functions);
 		free( tray );
 	}
 };

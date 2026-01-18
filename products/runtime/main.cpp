@@ -2,6 +2,7 @@
 #include "engine/state.hxx"
 #include "fibre/fibre.hxx"
 #include "./utility/debug.hxx"
+#include "memory/constants.hxx"
 #include "vminit/vminit.hxx"
 #include <cstddef>
 #include <cstdint>
@@ -27,28 +28,60 @@ int main() {
 	tray->functions[0] = &fibre1;
 	tray->functions[1] = &fibre2;
 	tray->length+=2;
-	
-	uint64_t* instructions = new uint64_t[]{
-		(uint64_t)OPCODES::launch << 48, 14, //0
-		//fibre1
-		(uint64_t)yield << 48, 0, //2
-		(uint64_t)uxsub << 48, 1, //4
-		(uint64_t)scall << 48, 0, //6
-		(uint64_t)eq << 48, 0, //if the registers are equal or not 8
-		(uint64_t)jifn << 48, 2, //10
-		(uint64_t)exitf << 48, 0, //12
-	
-	 	//fibre2
-		(uint64_t)uxadd << 48 | (uint64_t) RegisterID::R2 << 32, 6, //14
-		(uint64_t)scall << 48, 1, //16
-		(uint64_t)yield << 48, 0,
-		(uint64_t)uxsub << 48 | (uint64_t) RegisterID::R2 << 32, 1,
-		(uint64_t)eq << 48, 0,
-		(uint64_t)jifn << 48, 16,
-		(uint64_t)exitf << 48, 0
-	};
 
-	start(tray, nullptr, instructions);
+	uint8_t *bytes = (uint8_t *)malloc(sizeof(uint8_t));
+	Constant *ctx = Constant::init(bytes, 1);
+	
+	uint64_t* instructions = (uint64_t *)malloc(sizeof(uint64_t) * 28);
+	int i = 0;
+	
+	// launch
+	instructions[i++] = ((uint64_t)OPCODES::launch << 48);
+	instructions[i++] = 14;
+	
+	// fibre 1
+	instructions[i++] = ((uint64_t)yield  << 48);
+	instructions[i++] = 0;
+	
+	instructions[i++] = ((uint64_t)uxsub  << 48);
+	instructions[i++] = 1;
+	
+	instructions[i++] = ((uint64_t)scall  << 48);
+	instructions[i++] = 0;
+	
+	instructions[i++] = ((uint64_t)eq     << 48);
+	instructions[i++] = 0;
+	
+	instructions[i++] = ((uint64_t)jifn   << 48);
+	instructions[i++] = 2;
+	
+	instructions[i++] = ((uint64_t)exitf  << 48);
+	instructions[i++] = 0;
+	
+	
+	// fibre 2
+	instructions[i++] = ((uint64_t)uxadd  << 48) | ((uint64_t)RegisterID::R2 << 32);
+	instructions[i++] = 6;
+	
+	instructions[i++] = ((uint64_t)scall  << 48);
+	instructions[i++] = 1;
+	
+	instructions[i++] = ((uint64_t)yield  << 48);
+	instructions[i++] = 0;
+	
+	instructions[i++] = ((uint64_t)uxsub  << 48) | ((uint64_t)RegisterID::R2 << 32);
+	instructions[i++] = 1;
+	
+	instructions[i++] = ((uint64_t)eq     << 48);
+	instructions[i++] = 0;
+	
+	instructions[i++] = ((uint64_t)jifn   << 48);
+	instructions[i++] = 16;
+	
+	instructions[i++] = ((uint64_t)exitf  << 48);
+	instructions[i++] = 0;
+
+	start(tray, ctx, instructions);
 	return 0;
 	
 }

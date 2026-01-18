@@ -2,6 +2,8 @@
 #include "../engine/engine.hxx"
 #include "../utility/os_thread.hxx"
 #include "../utility/debug.hxx"
+#include <cstddef>
+#include <cstdlib>
 
 Worker *Worker::init() {
 	
@@ -42,6 +44,12 @@ void Worker::execute(Worker *worker, Factory *factory) {
 		worker
 	);
 	
-	worker->thread = createThread<RunnerState>(&run, workerState);
+	Thread id;
+	createThread<RunnerState>(&run, workerState, &id);
+	pthread_join(id, NULL);
 
+}
+
+void Worker::drop(Worker *worker) {
+	free(worker);
 }

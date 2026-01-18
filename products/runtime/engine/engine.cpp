@@ -3,6 +3,7 @@
 #include "opcode.hxx"
 #include <cstdint>
 #include <bit>
+#include <pthread.h>
 #include "state.hxx"
 
 void dump(Fibre* f) {
@@ -645,6 +646,32 @@ void *run(void *args) {
 					CDLLWrapper<Fibre>::drop(current);
 					//drop the other stuff as well.
 					//since this is responsible for only dropping the worker
+					pthread_mutex_lock(&state->factory->mutex);
+				
+					//WARNING: This part might cause issue because I am writing it as-is for now
+					//search the worker
+					CDLLWrapper<Worker> *flush_node = state->factory->workers;
+					
+					//search operation
+					while ( flush_node->node != state->worker ) {
+						flush_node = flush_node->next;
+					}
+				
+					flush_node->prev->next = flush_node->next;
+					flush_node->next->prev = flush_node->prev;
+					
+					state->factory->workers = flush_node->next;
+					flush_node->next = nullptr;
+					flush_node->prev = nullptr;
+					//now we can free it.
+					Worker::drop(flush_node->node);
+					CDLLWrapper<Worker>::drop(flush_node);
+					//and I am done.
+					
+					pthread_mutex_unlock(&state->factory->mutex);
+					
+					//unique to each thread.
+					RunnerState::drop(state);
 					return nullptr;
 				}
 				
