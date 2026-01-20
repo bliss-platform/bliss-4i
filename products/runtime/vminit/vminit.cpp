@@ -2,7 +2,7 @@
 #include "../factory/factory.hxx"
 #include "../utility/debug.hxx"
 
-void start(SFXTray *tray, Constant *pool, uint64_t* instruction) {
+void start(SFXTray *tray, Constant *pool, uint64_t* instruction) noexcept {
 	
 	//first create a factory
 	Factory *factory = Factory::init(tray, pool, instruction);
@@ -12,18 +12,17 @@ void start(SFXTray *tray, Constant *pool, uint64_t* instruction) {
 	Fibre *fibre_main = Fibre::init();
 	
 	//testing purpose
-	fibre_main->registers[RegisterID::R1].u64 = 5;
+	fibre_main->registers[RegisterID::R1].u64 = 100000000;
 	
-	Worker::addFibre(worker_main, fibre_main);
-	Factory::spawnWorker(factory, worker_main);
+	worker_main->addFibre(fibre_main);
+	factory->spawnWorker(worker_main);;
 	
 	//start the execution
-	Worker::execute(worker_main, factory);
+	worker_main->execute(factory);
 	
 	SFXTray::drop(tray);
 	free(instruction);
-	Constant::drop(pool);
-	
-	Factory::drop(factory);
+	pool->drop();
+	factory->drop();
 	
 }

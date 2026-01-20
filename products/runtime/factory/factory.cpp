@@ -1,9 +1,11 @@
+#include "../utility/os_thread.hxx"
 #include "factory.hxx"
 #include "worker.hxx"
+#include "../utility/debug.hxx"
 #include <pthread.h>
 #include <cstdlib>
 
-Factory *Factory::init( SFXTray *tray, Constant* pool, uint64_t* instruction ) {
+Factory *Factory::init( SFXTray *tray, Constant* pool, uint64_t* instruction ) noexcept {
 	
 	Factory *factory = (Factory*)calloc(1, sizeof(Factory));
 	factory->constantPool = pool;
@@ -15,26 +17,35 @@ Factory *Factory::init( SFXTray *tray, Constant* pool, uint64_t* instruction ) {
 	
 }
 
-void Factory::spawnWorker(Factory *factory, Worker *worker) {
+void Factory::spawnWorker(Worker *worker) noexcept {
 	
 	CDLLWrapper<Worker> *node = CDLLWrapper<Worker>::init(worker);
 	
-	if ( factory->workers == nullptr ) {
+	if ( this->workers == nullptr ) {
 	
-		factory->workers = node;
+		this->workers = node;
 	
 	} else {
 		
-		node->next = factory->workers->next;
-		node->prev = factory->workers->prev;
+		node->next = this->workers->next;
+		node->prev = this->workers->prev;
 		
-		factory->workers->next->prev = node;
-		factory->workers->next = node;
+		this->workers->next->prev = node;
+		this->workers->next = node;
 	
 	}
 	
 }
 
-void Factory::drop(Factory *factory) {
-	free(factory);
+void Factory::drop() noexcept {
+	printf("Total opcode ran: %lu\n", this->opcode_counter);
+	free(this);
+}
+
+void Factory::lock() noexcept {
+	thread_lock(&this->mutex);	
+}
+
+void Factory::release() noexcept {
+	thread_release(&this->mutex);
 }

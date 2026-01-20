@@ -4,6 +4,7 @@
 #include "../utility/cdll_wrapper.hxx"
 #include "../utility/llwrapper.hxx"
 #include "../fibre/fibre.hxx"
+#include "../memory/allocator.hxx"
 #include "message.hxx"
 #include <cstdint>
 
@@ -16,15 +17,16 @@ struct Worker {
 	CDLLWrapper<Fibre> *fibres;
 	LLWrapper<Message> *mailbox_head;
 	LLWrapper<Message> *mailbox_tail;
-	void *memory; //boring old memory. to be used by custom allocators ofc.
+	Memory *memory;
 	
-	static Worker *init();
-	static void addFibre(Worker *worker, Fibre *fibre);
-	static void drop(Worker *worker);
-	static void execute(Worker *worker,  Factory *factory);
-	static void terminate(Worker *worker);
-	static void putmsg(Message *msg, Factory *factory, Worker *worker);
+	static Worker *init() noexcept;
+	static void terminate(Worker *worker) noexcept;
 	
+	void addFibre(Fibre *fibre) noexcept;
+	void drop() noexcept;
+	void execute(Factory *factory) noexcept;
+	void putmsg(Message *msg, Factory *factory) noexcept;
+		
 };
 
 #endif

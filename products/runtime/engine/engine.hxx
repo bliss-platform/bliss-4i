@@ -22,6 +22,6 @@ struct RunnerState {
 	}
 };
 
-void *run( void *args );
+void *run( void *args ) noexcept;
 
 #endif

@@ -6,22 +6,26 @@
 #include <cstdlib>
 #include <pthread.h>
 
-Worker *Worker::init() {
+Worker *Worker::init() noexcept {
 	
 	//for now, we will do simple allocations only.
 	//TODO: Impement this even better.
 	Worker *worker = (Worker*)calloc(1, sizeof(Worker));
 	worker->mailbox_tail = nullptr;
 	worker->mailbox_head = nullptr;
+	
+	//memory will be provided by the factory, but for testing purposes we are using allocator
+	//invocation for now.
+	worker->memory = Memory::init();
 	return worker;
 	
 }
 
-void Worker::addFibre(Worker *worker, Fibre *fibre) {
+void Worker::addFibre(Fibre *fibre) noexcept {
 	
-	if ( worker->fibres == nullptr ) {
+	if ( this->fibres == nullptr ) {
 	
-		worker->fibres = CDLLWrapper<Fibre>::init(fibre);
+		this->fibres = CDLLWrapper<Fibre>::init(fibre);
 	
 	} else {
 		
@@ -29,23 +33,23 @@ void Worker::addFibre(Worker *worker, Fibre *fibre) {
 		//now it will be inserted between the existing node
 		//and it's right node.
 		
-		node->next = worker->fibres->next;
-		node->prev = worker->fibres;
+		node->next = this->fibres->next;
+		node->prev = this->fibres;
 		
-		worker->fibres->next->prev = node;
-		worker->fibres->next = node;
+		this->fibres->next->prev = node;
+		this->fibres->next = node;
 		
 		//node added successfully
 	}
 	
 }
 
-void Worker::execute(Worker *worker, Factory *factory) {
+void Worker::execute(Factory *factory) noexcept {
 
 	//create the state to start.
 	RunnerState *workerState = RunnerState::init(
 		factory,
-		worker
+		this
 	);
 	
 	Thread id;
@@ -54,20 +58,20 @@ void Worker::execute(Worker *worker, Factory *factory) {
 
 }
 
-void Worker::drop(Worker *worker) {
-	free(worker);
+void Worker::drop() noexcept {
+	free(this);
 }
 
-void Worker::putmsg(Message *msg, Factory* factory, Worker *worker) {
+void Worker::putmsg(Message *msg, Factory* factory) noexcept {
 
-	pthread_mutex_lock(&factory->mutex);
+	factory->lock();
 	LLWrapper<Message> *node = LLWrapper<Message>::init(msg);
 	
-	if ( worker->mailbox_tail != nullptr ) {
-		worker->mailbox_tail->next = node;
+	if ( this->mailbox_tail != nullptr ) {
+		this->mailbox_tail->next = node;
 	}
 	
-	worker->mailbox_tail = node;
-	pthread_mutex_unlock(&factory->mutex);
+	this->mailbox_tail = node;
+	factory->lock();
 
 }

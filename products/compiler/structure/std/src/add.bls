@@ -1,0 +1,17 @@
+//this is like namespaces in C++
+
+scope add;
+scope funny;
+scope funny::software;
+
+pub fx add::add(int a, int b): int {
+		
+	return a + b;
+	
+}
+
+scope funny::data::{
+
+	//a bit confusing I believe?
+	
+}

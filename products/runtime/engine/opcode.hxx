@@ -88,12 +88,13 @@ enum OPCODES {
 	// [ ccpy/fccpy ][ register ][ padding ][ constant_index ]
 	
 	// allocate in heap memory, free in heap memory
-	rtalloc, rtfree,
+	rtalloc, rtfree, //for now, it's just malloc.
 	// [ alloc ][ padding ] //takes the size from R1
 	// [ free ][ padding ]
 	ialloc, //inline allocator, basically [ alloc ][ padding ][ size ]
 	//useful for fixed size allocation where we know the size of objects.
 	falloc, //allocate a fixed sized (pre-determined) value on the stack. Identical to ialloc, just different allocation region.
+	//uses bump allocator instead.
 	// store data to register -> heap
 	store, fstore,
 	// load data to heap -> register

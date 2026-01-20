@@ -15,13 +15,20 @@ struct Factory {
 	int worker_count = 0;
 	pthread_mutex_t mutex;
 	
+	//DEBUG PROPERTY
+	uint64_t opcode_counter;
+	//DEBUG PROPERTY
+	
 	uint64_t *instructions;
 	Constant *constantPool;
 	SFXTray *tray;
 	
-	static Factory *init(SFXTray *tray, Constant* pool, uint64_t* instruction);
-	static void drop(Factory *factory);
-	static void spawnWorker(Factory* factory, Worker *worker);
+	static Factory *init(SFXTray *tray, Constant* pool, uint64_t* instruction) noexcept;
+	
+	void drop() noexcept;
+	void spawnWorker(Worker *worker) noexcept;
+	void lock() noexcept;
+	void release() noexcept;
 	
 };
 

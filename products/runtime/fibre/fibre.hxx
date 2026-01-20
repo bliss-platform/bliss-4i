@@ -35,8 +35,8 @@ struct Fibre {
 	uint8_t flag; //used by boolean operators.
 	FibreStatus status;
 	
-	static Fibre *init();
-	static void drop(Fibre* fibre);
+	static Fibre *init() noexcept;
+	void drop() noexcept;
 	
 };
 

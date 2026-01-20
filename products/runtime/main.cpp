@@ -9,19 +9,15 @@
 #include <cstdlib>
 #include <sys/types.h>
 
-void test(Fibre *f) {
-	LOG("Hello World System Call\n");
+void fibre1(Fibre *f) noexcept {
+	//printf("Fibre @1 -- First Fibre\n");
 }
 
-void fibre1(Fibre *f) {
-	LOG("Fibre @1 -- First Fibre\n");
+void fibre2(Fibre *f) noexcept {
+	//printf("Fibre @2 -- Second Fibre\n");
 }
 
-void fibre2(Fibre *f) {
-	LOG("Fibre @2 -- Second Fibre\n");
-}
-
-int main() {
+int main() noexcept {
 	
 	SFXTray *tray = SFXTray::init();
 	tray->functions = (void(**)(Fibre *f))malloc( sizeof( void(**)(Fibre *f) ) * 2 );

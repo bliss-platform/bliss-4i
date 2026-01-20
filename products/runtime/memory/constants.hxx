@@ -8,8 +8,8 @@ struct Constant {
 	uint8_t *bytes;
 	size_t size;
 	
-	static Constant *init(uint8_t *bytes, size_t size);
-	static void drop(Constant *constant);
+	static Constant *init(uint8_t *bytes, size_t size) noexcept;
+	void drop() noexcept;
 };
 
 #endif

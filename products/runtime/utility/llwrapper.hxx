@@ -13,7 +13,7 @@ struct LLWrapper {
 	LLWrapper<T> *next;
 	T *node;
 	
-	static LLWrapper<T> *init( T *node ) {
+	static LLWrapper<T> *init( T *node ) noexcept {
 		LLWrapper<T> *wp = (LLWrapper<T> *)calloc(1, sizeof(LLWrapper<T>));
 		wp->next = wp;
 		wp->node = node;
@@ -22,10 +22,10 @@ struct LLWrapper {
 	}
 	
 	//WARNING: wp->node must be freed before.
-	static void drop(LLWrapper<T> *wp) {
+	void drop() noexcept {
 		//assuming the node is free.
-		wp->next = nullptr;
-		free(wp);
+		this->next = nullptr;
+		free(this);
 	}
 	
 };

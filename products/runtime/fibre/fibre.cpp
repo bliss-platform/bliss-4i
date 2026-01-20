@@ -1,9 +1,9 @@
 #include "fibre.hxx"
 
-Fibre *Fibre::init() {
+Fibre *Fibre::init() noexcept {
 	return (Fibre*)calloc( 1, sizeof( Fibre ) );
 }
 
-void Fibre::drop(Fibre* fibre) {
-	free(fibre);
+void Fibre::drop() noexcept {
+	free(this);
 }

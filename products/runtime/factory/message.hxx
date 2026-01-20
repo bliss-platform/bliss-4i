@@ -8,8 +8,8 @@ struct Message {
 	std::span<uint8_t> bytes;
 	uint32_t sender_id;
 	
-	static Message *init();
-	static void *drop( Message *message );
+	static Message *init() noexcept;
+	static void *drop( Message *message ) noexcept;
 };
 
 #endif

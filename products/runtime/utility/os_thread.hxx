@@ -11,7 +11,7 @@
 	#endif
 	
 	template<typename Arg>
-	void createThread(void *(*start_routine)(void *), Arg *arg, Thread *id) {
+	void createThread(void *(*start_routine)(void *), Arg *arg, Thread *id) noexcept {
 		
 		#ifndef _WIN32
 			//linux platform
@@ -20,5 +20,17 @@
 		#endif
 			
 	}
+	
+	void thread_lock(
+		#ifndef _WIN32
+			pthread_mutex_t *id
+		#endif
+	) noexcept;
+	
+	void thread_release(
+		#ifndef _WIN32
+			pthread_mutex_t *id
+		#endif
+	) noexcept;
 	
 #endif

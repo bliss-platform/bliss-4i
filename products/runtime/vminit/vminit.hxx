@@ -5,6 +5,6 @@
 #include "../memory/constants.hxx"
 #include <cstdint>
 
-void start(SFXTray *tray, Constant *pool, uint64_t* instruction);
+void start(SFXTray *tray, Constant *pool, uint64_t* instruction) noexcept;
 
 #endif

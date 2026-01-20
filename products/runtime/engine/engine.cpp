@@ -58,7 +58,7 @@ void fetch(uint64_t left, uint64_t right, uint16_t& opcode, uint16_t& val1, uint
 	
 }
 
-void *run(void *args) {
+void *run(void *args) noexcept {
 
 	RunnerState *state = static_cast<RunnerState *>(args);
 	//runs the opcodes here
@@ -70,7 +70,7 @@ void *run(void *args) {
 	CDLLWrapper<Fibre> *current = state->worker->fibres;
 	
 	while(true) {
-
+	
 		fetch(
 			state->factory->instructions[ fibre->RPC ], 
 			state->factory->instructions[ fibre->RPC + 1 ], 
@@ -375,7 +375,7 @@ void *run(void *args) {
 				Fibre *fib = Fibre::init();
 				fib->RPC = val3; //because this is the actual address.
 				
-				Worker::addFibre(state->worker, fib);
+				state->worker->addFibre(fib);
 				
 				break;
 			}
@@ -389,8 +389,8 @@ void *run(void *args) {
 				Worker *worker = Worker::init();
 				Fibre *fib = Fibre::init();
 				fib->RPC = val3;
-				Worker::addFibre(worker, fib);
-				Factory::spawnWorker(state->factory, worker);
+				worker->addFibre(fib);
+				state->factory->spawnWorker(worker);
 				
 				break;
 			}
@@ -603,6 +603,10 @@ void *run(void *args) {
 			}
 			
 			case OPCODES::rtalloc: {
+				
+				//by convention, it should simply allocate the memory and
+				//store the pointer to the 
+				
 				break;
 			}
 			
@@ -635,7 +639,6 @@ void *run(void *args) {
 			}
 			
 			case OPCODES::inspect: {
-				
 				dump(fibre);
 				break;
 			}
@@ -646,11 +649,11 @@ void *run(void *args) {
 					//yeah we are at the same node basically.
 					current->next = nullptr;
 					current->prev = nullptr;
-					Fibre::drop(current->node);
-					CDLLWrapper<Fibre>::drop(current);
+					current->node->drop();
+					current->drop();
 					//drop the other stuff as well.
 					//since this is responsible for only dropping the worker
-					pthread_mutex_lock(&state->factory->mutex);
+					state->factory->lock();
 				
 					//WARNING: This part might cause issue because I am writing it as-is for now
 					//search the worker
@@ -668,11 +671,11 @@ void *run(void *args) {
 					flush_node->next = nullptr;
 					flush_node->prev = nullptr;
 					//now we can free it.
-					Worker::drop(flush_node->node);
-					CDLLWrapper<Worker>::drop(flush_node);
+					flush_node->node->drop();
+					flush_node->drop();
 					//and I am done.
 					
-					pthread_mutex_unlock(&state->factory->mutex);
+					state->factory->release();
 					
 					//unique to each thread.
 					RunnerState::drop(state);
@@ -690,12 +693,18 @@ void *run(void *args) {
 	
 				flush->next = nullptr;
 				flush->prev = nullptr;
-				Fibre::drop(flush->node);
-				CDLLWrapper<Fibre>::drop(flush);
+				flush->node->drop();
+				flush->drop();
 				
 				break;
 			}	
 		}
+		
+		//debug property
+		state->factory->lock();
+		state->factory->opcode_counter++;
+		state->factory->release();
+		//debug property
 		
 	}
 	
