@@ -1,5 +1,0 @@
-use std; //this is literally the root here
-
-//let's say I want to use the add function
-
-add::add(10, 20); //-> gives us 30 ofc.

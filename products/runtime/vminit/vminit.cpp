@@ -12,7 +12,7 @@ void start(SFXTray *tray, Constant *pool, uint64_t* instruction) noexcept {
 	Fibre *fibre_main = Fibre::init();
 	
 	//testing purpose
-	fibre_main->registers[RegisterID::R1].u64 = 100000000;
+	fibre_main->registers[RegisterID::R1].u64 = 10;
 	
 	worker_main->addFibre(fibre_main);
 	factory->spawnWorker(worker_main);;
@@ -20,6 +20,7 @@ void start(SFXTray *tray, Constant *pool, uint64_t* instruction) noexcept {
 	//start the execution
 	worker_main->execute(factory);
 	
+	//free everything
 	SFXTray::drop(tray);
 	free(instruction);
 	pool->drop();

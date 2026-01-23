@@ -5,16 +5,17 @@
 #include "memory/constants.hxx"
 #include "vminit/vminit.hxx"
 #include <cstddef>
+#include <cstdio>
 #include <cstdint>
 #include <cstdlib>
 #include <sys/types.h>
 
 void fibre1(Fibre *f) noexcept {
-	//printf("Fibre @1 -- First Fibre\n");
+	printf("Fibre @1 -- First Fibre\n");
 }
 
 void fibre2(Fibre *f) noexcept {
-	//printf("Fibre @2 -- Second Fibre\n");
+	printf("Fibre @2 -- Second Fibre\n");
 }
 
 int main() noexcept {
@@ -28,7 +29,7 @@ int main() noexcept {
 	uint8_t *bytes = (uint8_t *)malloc(sizeof(uint8_t));
 	Constant *ctx = Constant::init(bytes, 1);
 	
-	uint64_t* instructions = (uint64_t *)malloc(sizeof(uint64_t) * 28);
+	uint64_t* instructions = (uint64_t *)malloc(sizeof(uint64_t) * 30);
 	int i = 0;
 	
 	// launch

@@ -1,9 +1,7 @@
 scope Math;
 
 fx privateStuff() {
-	
 	//cannot be accessed because it not under any scope.
-	
 };
 
 //define a sub-scope here

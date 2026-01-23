@@ -7,7 +7,7 @@ VMINIT = \
 	vminit/vminit.cpp
 
 MEMORY = \
-	memory/constants.cpp
+	memory/constants.cpp memory/allocator.cpp
 	
 FACTORY = \
 	factory/factory.cpp \

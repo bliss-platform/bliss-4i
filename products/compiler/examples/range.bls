@@ -1,0 +1,10 @@
+//ranges are fun little thing that makes iteration easier in bliss
+
+//ranges are explicit in bliss now!
+for ( int i; 0 <= i < 5; i++ ) {
+	
+}
+
+if ( a < b <= c ) {
+	//range operator
+}

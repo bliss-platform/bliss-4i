@@ -59,6 +59,7 @@ void Worker::execute(Factory *factory) noexcept {
 }
 
 void Worker::drop() noexcept {
+	this->memory->drop();
 	free(this);
 }
 
