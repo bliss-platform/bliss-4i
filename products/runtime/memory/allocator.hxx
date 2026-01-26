@@ -5,14 +5,18 @@
 struct Memory {
 
 	void *heap;
-	void *stack;
+	void *functionRegion;
 	
 	static Memory* init() noexcept;
 	
 	//and this parts reuses iallocator
 	void rtalloc() noexcept;
-	void rtfree() noexcept;
+	void vialloc() noexcept;
 	void falloc() noexcept;
+	
+	void vifree() noexcept;
+	void rtfree() noexcept;
+	void ffree() noexcept;
 	
 	void drop() noexcept;
 	

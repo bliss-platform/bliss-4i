@@ -76,29 +76,20 @@ enum OPCODES {
 	
 	// copy data between registers, clear data in a register
 	mov, cls, movflag,
-	
 	// [ mov ][ from ][ padding ][ to ]
 	// [ cls ][ adrs ][ padding ]
 	
-	// copy over in heap using absolute heap address, or function offset heap address 
-	hcpy, fhcpy,
-	// [ hcpy/fhcpy ][ padding ]
-	// copy a constant to register from constant space, or function offset heap address
-	ccpy, fccpy,
-	// [ ccpy/fccpy ][ register ][ padding ][ constant_index ]
+	//copy across memory.
+	heapcopy, constcopy, 
 	
 	// allocate in heap memory, free in heap memory
-	rtalloc, rtfree, //for now, it's just malloc.
-	// [ alloc ][ padding ] //takes the size from R1
-	// [ free ][ padding ]
-	ialloc, //inline allocator, basically [ alloc ][ padding ][ size ]
-	//useful for fixed size allocation where we know the size of objects.
-	falloc, //allocate a fixed sized (pre-determined) value on the stack. Identical to ialloc, just different allocation region.
-	//uses bump allocator instead.
+	rtalloc, vialloc, falloc, //allocate on the memory, the virtual memory or the function memory.
+	irtalloc, ivalloc, //inline variants.
+	rtfree, vifree, ffree, //free from runtime, virtual or function space.
 	// store data to register -> heap
-	store, fstore,
+	memtoreg, fmemtoreg,
 	// load data to heap -> register
-	load, fload,
+	regtomem, fregtomem,
 	//program end
 	inspect, //this is only for developer mode.
 	exitf

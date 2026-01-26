@@ -20,7 +20,7 @@ struct Worker {
 	Memory *memory;
 	
 	static Worker *init() noexcept;
-	static void terminate(Worker *worker) noexcept;
+	void terminate() noexcept;
 	
 	void addFibre(Fibre *fibre) noexcept;
 	void drop() noexcept;

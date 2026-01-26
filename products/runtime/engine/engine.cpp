@@ -582,59 +582,10 @@ void *run(void *args) noexcept {
 				break;
 			}
 			
-			case OPCODES::hcpy: {
-				//TODO
-				break;
-			}
-			
-			case OPCODES::fhcpy: {
-				//TODO
-				break;
-			}
-			
-			case OPCODES::ccpy: {
-				//TODO
-				break;
-			}
-			
-			case OPCODES::fccpy: {
-				//TODO
-				break;
-			}
-			
 			case OPCODES::rtalloc: {
 				
 				//by convention, it should simply allocate the memory and
-				//store the pointer to the 
-				
-				break;
-			}
-			
-			case OPCODES::rtfree: {
-				break;
-			}
-			
-			case OPCODES::ialloc: {
-				break;
-			}
-			
-			case OPCODES::falloc: {
-				break;
-			}
-			
-			case OPCODES::store: {
-				break;
-			}
-			
-			case OPCODES::fstore: {
-				break;
-			}
-			
-			case OPCODES::load: {
-				break;
-			}
-			
-			case OPCODES::fload: {
+				//store the pointer to the
 				break;
 			}
 			
