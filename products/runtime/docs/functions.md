@@ -37,7 +37,6 @@ struct CallStackItem {
 	uint16_t id;             // Function identifier
 };
 ```
-
 ------------------------------------------------------------------------
 
 ## Call Mechanism

@@ -1,3 +1,5 @@
-use package; //package here is the project name basically
+using package;
 
-std::io::println("Sum of two numbers: { Math::add( 10 + 20 ) }");
+std.console.log(
+	"Sum of two numbers: { math.add( 10 + 20 ) }"
+);

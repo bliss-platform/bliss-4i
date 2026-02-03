@@ -1,7 +1,7 @@
 //shareable are values that can be used
 //to share across different workers.
 
-use std;
+using std.console;
 
 Shareable<int> counter = 0;
 
@@ -28,4 +28,4 @@ Worker w2 = spawn (Worker e) => {
 w1.join();
 w2.join();
 
-std::io::println("The counter is: { counter }");
+console.log("The counter is: { counter }");

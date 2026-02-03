@@ -5,11 +5,11 @@ fx privateStuff() {
 };
 
 //define a sub-scope here
-Math::SubScope::{
+Math.SubScope {
 
 };
 
-Math::{
+Math {
 	
 	//private by default
 	fx add(int a, int b): int {
@@ -22,6 +22,6 @@ Math::{
 	
 };
 
-pub fx Math::sub(int a, int b): int {
+pub fx Math.sub(int a, int b): int {
 	return a - b;
 };

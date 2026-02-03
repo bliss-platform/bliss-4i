@@ -1,1 +1,1 @@
-std::io::println("Hello World");
+std.console.log("Hello World");

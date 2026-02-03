@@ -82,10 +82,13 @@ enum OPCODES {
 	//copy across memory.
 	heapcopy, constcopy, 
 	
+	//call heap and call function
+	callx, callf,
+	
 	// allocate in heap memory, free in heap memory
-	rtalloc, vialloc, falloc, //allocate on the memory, the virtual memory or the function memory.
-	irtalloc, ivalloc, //inline variants.
-	rtfree, vifree, ffree, //free from runtime, virtual or function space.
+	rtalloc, rtfree, //stuff used by other allocators.
+	newobj, freeobj, //new object allocation.
+	
 	// store data to register -> heap
 	memtoreg, fmemtoreg,
 	// load data to heap -> register
