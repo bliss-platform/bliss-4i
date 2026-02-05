@@ -1,3 +1,9 @@
+---
+title: Data and Action Model
+nav_order: 1
+parent: Compiler
+---
+
 # Bliss Language Specification
 
 ## Data, Actions, Binded Types, and Calling Conventions
