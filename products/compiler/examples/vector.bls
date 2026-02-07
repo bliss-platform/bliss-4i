@@ -1,0 +1,57 @@
+//reference: vector.(dll/so)
+using std.syscall.syscallIndex;
+
+//proposed by the system call interface basically.
+data NativeVectorContainer<T, K> {
+	private T[] items; //arrays by default stores size and length.
+	private K obj; //this should be the vector container.
+}
+
+pub data VectorContainer<T> {
+	private u64 ptr; //cannot be accessed after constructor.
+	readonly i32 length = 0; //if something is readonly, it can be set only during constructor.
+	readonly i32 size = 0;
+}
+
+action VectorActions<T> {
+	fx push(self, T item) -> void;
+	fx get(self, i32 index) -> T;		
+}
+
+bind VectorActions, VectorContainer<T> as STDVector {
+	fx push(self, T item) { /*TODO*/ };
+	fx get(self, i32 index) { /*TODO*/ };
+}
+
+alias VectorContainer<T>::STDVector as Vector<T>;
+
+action VectorFromArray.new<T>(self) -> Vector<T>
+
+bind VectorFromArray.new<T>(self) -> Vector<T> {
+
+	//create a STD vector first
+	//size will be adjusted by the __builtin_unsafe_native_call__ below.
+	Vector<T> vec = VectorData(ptr = 0, length = self.length, size = 0)::STDVector;
+	
+	/*
+		Note: T[] is a primitive type (array) that always has fixed size.
+		It's always allocated on stack for the exact same reason.
+		T[] has a .lenght property that tells us the size of the array
+		at runtime, but never changes.
+	*/
+	
+	
+	NativeVectorContainer<T> ct = NativeVectorContainer<T>(
+		items = copy self,
+		obj = vec
+	)
+	
+	//allocates the stdvector in memory of bliss runtime itself.
+	__builtin_unsafe_native_call__<NativeVectorContainer<T>>(
+		syscallIndex::createVector, //syscall
+		ct
+	)?; //everything else is handled by the dll.
+		
+	return vec;
+
+}, T[] as stdVector;	

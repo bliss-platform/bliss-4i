@@ -4,6 +4,9 @@ nav_order: 1
 parent: Compiler
 ---
 
+TODO: Discuss how binds may not be used as a nominal types and might
+even be removed completely.
+
 # Bliss Language Specification
 
 ## Data, Actions, Binded Types, and Calling Conventions
@@ -437,7 +440,190 @@ Binded types exist to lock meaning and avoid ambiguity.
 
 ---
 
-## 14. Canonical Summary
+## 14. Type aliasing and qualified names
+
+Type definitions where binders are used a lot can be a handful to
+write. To tackle this, a syntactic sugar for type aliasing is
+suggested.
+
+```
+using std.actions.summary;
+
+data UserData {
+	String name;
+	int age;
+}
+
+bind summary, UserData as UserBinder {
+	fx summarize(self) {
+		return "Name: { self.name }\nAge: { self.age }"
+	}
+}
+
+alias UserData::UserBinder as User; //this is just a dumb rename
+alias UserData::UserBinder as SameButDifferent; //again dumb rename
+```
+
+---
+
+## 15. Standalone Bindings
+
+Whenever we bind some data, we might want a standalone type without type
+aliasing.
+
+By default, all bindings are types as well, so they can stand solo as well.
+
+```
+bind summary, UserData as User { ... } //implementations
+```
+
+so the `User` is a bound semantic type formed from `UserData` and the `summary` action.
+
+---
+## 16. Singleton Actions and Bindings
+
+In some situations, a behavior consists of a **single action function** that does not naturally belong to a larger conceptual group. Creating a dedicated action block in such cases adds syntactic structure without providing additional semantic value.
+
+To address this, Bliss provides a **singleton action syntax** as a purely syntactic convenience. This allows single-responsibility behaviors to be expressed directly, without forcing artificial grouping.
+
+---
+
+### 16.1 Singleton Action Definition
+
+A singleton action can be declared inline using the following form:
+
+```bls
+action fx Walkable.walk(self) -> void;
+```
+
+This declaration is syntactic sugar for an action containing exactly one function. It does not introduce a new kind of action, nor does it weaken the action model in any way. All semantic rules applicable to regular actions continue to apply unchanged.
+
+---
+
+### 16.2 Singleton Binding
+
+A singleton action may be bound directly to a data type using an inline bind expression:
+
+```bls
+bind Walkable.walk(self) {
+    self.steps += 20;
+}, DogData as WalkableDog;
+```
+
+This form is semantically equivalent to a standard bind involving a single-action action type. The resulting type `WalkableDog` is a nominal binded (semantic) type with closed semantics, exactly as defined by the core binding rules.
+
+---
+
+### 16.3 Aliasing as a Unified View
+
+If a simpler or more expressive name is desired, the resulting binded type may be aliased:
+
+```bls
+alias DogData::WalkableDog as Dog;
+```
+
+This alias introduces no new meaning. It merely provides a more convenient name for an existing semantic type.
+
+---
+
+### 16.4 Rationale
+
+Singleton actions exist to support **single-responsibility behaviors** without encouraging premature or artificial abstraction. They reduce boilerplate, improve readability, and make refactoring easier, while remaining fully consistent with the Data–Action–Bind model.
+
+No runtime overhead is introduced, and all semantics remain explicit and local.
+
+---
+
+## 17. Field Values
+
+In Bliss, fields inside a `data` definition may take different forms depending on how they are intended to be accessed and mutated. By default, all fields are **readable and writable** from any context.
+
+Bliss refines this behavior using a small set of **field modifiers**. These modifiers do not change the DAOP model itself; instead, they precisely control **visibility** and **mutability** of fields.
+
+The available modifiers are:
+
+* `private`
+* `hide`
+* `readonly`
+
+They may be used individually or in combination.
+
+---
+
+### 17.1 `private`
+
+`private` is the **strongest** field modifier.
+
+A `private` field is:
+
+* Visible **only during construction** of the data value
+* Completely inaccessible afterward
+* Not readable or writable by actions
+* Not part of the observable semantic state
+
+`private` fields exist solely for **runtime or native-layer mechanisms**, such as internal handles, storage anchors, or capability tokens.
+
+They are intentionally excluded from DAOP reasoning.
+
+---
+
+### 17.2 `hide`
+
+`hide` restricts field visibility to **actions only**.
+
+A `hide` field is:
+
+* Invisible to user-level code
+* Fully accessible within actions bound to the data
+* Part of the semantic state of the data
+
+This modifier is intended for **internal state** that affects behavior but should not be exposed as part of the public data surface.
+
+---
+
+### 17.3 `readonly`
+
+`readonly` restricts **when** a field may be written.
+
+A `readonly` field:
+
+* May be assigned only during construction
+* Cannot be overwritten outside of actions
+* Remains readable according to its visibility rules
+
+This modifier enforces immutability guarantees while preserving DAOP semantics.
+
+---
+
+### 17.4 Combined Modifiers
+
+Modifiers may be combined to further refine behavior.
+
+#### `readonly hide` / `hide readonly`
+
+This combination produces a field that:
+
+* Is visible only to actions
+* Can be assigned only during construction
+* Cannot be mutated afterward
+
+Such fields are useful for **internal constants**, cached metadata, or invariant state that should remain stable throughout the lifetime of the data value.
+
+---
+
+### Summary
+
+Field modifiers in Bliss refine *access* and *mutability* without altering the DAOP model itself:
+
+* `private` removes a field from semantic visibility entirely
+* `hide` limits visibility to actions
+* `readonly` limits mutability to construction time
+
+Together, these modifiers allow precise control over data representation while keeping data–action separation explicit and intact.
+
+---
+
+## 18. Canonical Summary
 
 > **Data defines memory.**
 > **Actions define behavior.**
