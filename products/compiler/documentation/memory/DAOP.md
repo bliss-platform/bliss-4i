@@ -4,9 +4,6 @@ nav_order: 1
 parent: Compiler
 ---
 
-TODO: Discuss how binds may not be used as a nominal types and might
-even be removed completely.
-
 # Bliss Language Specification
 
 ## Data, Actions, Binded Types, and Calling Conventions
@@ -55,8 +52,8 @@ A **data type** defines memory layout only.
 
 ```bliss
 data Data {
-    ptr bytes;
-    int size;
+    u64 byte_ptr;
+    u32 size;
 }
 ```
 
@@ -146,7 +143,9 @@ Annotations:
 
 ### 5.1 Definition
 
-A **bind** creates a new **nominal semantic type** by attaching an action to a data type.
+A bind is how we interpret an action, or a set of actions towards some data.
+This binding produces a interpretation token that can be used to add meaning
+to a data.
 
 ```bliss
 bind X, Data as SomeType {
@@ -156,7 +155,6 @@ bind X, Data as SomeType {
 
 Facts:
 
-* `SomeType` is a real, nominal type
 * It is neither `Data` nor `X`
 * It participates fully in the type system
 * It has **closed semantics**
@@ -168,7 +166,8 @@ Facts:
 A binded value is constructed explicitly:
 
 ```bliss
-Data::SomeType b;
+Data::SomeBinding b;
+Data::(BindA, BindB) c; //multi bindings
 ```
 
 This is **semantic construction**, not reinterpretation.
@@ -199,7 +198,7 @@ a::Y.length();
 ### 6.2 Closed Semantics (Binded Types)
 
 ```bliss
-Data::SomeType b;
+Data::SomeBind b;
 ```
 
 Characteristics:
@@ -245,38 +244,109 @@ k.length::Y();
 
 ---
 
-## 8. Binding Rules
+## 8. Binding
 
-### 8.1 Single-Action Binding
+A **bind** associates a non-empty set of actions with a data type by creating an **interpretation token**.
 
-Each bind associates **exactly one action** with a data type.
+An interpretation token does not introduce a new nominal data type. Instead, it establishes a sealed semantic relationship between:
 
-```bliss
-bind X, Data as A;
-```
-
-Illegal:
+* A specific data type (memory), and
+* A specific unordered set of actions (behavior).
 
 ```bliss
-bind (X, Y), Data as W;   // error
+bind (X, Y, Z), Data as A;
 ```
 
-> Binds never compose actions.
+Here, `A` is an interpretation token representing:
+
+```
+InterpretationToken = (Data, ActionSet)
+```
+
+Actions themselves are not interpretation tokens.
+
+* `X` is an action.
+* `Data` is memory.
+* `A` is the interpretation token joining them.
+
+Therefore:
+
+```bliss
+Data::A      // valid
+Data::X      // illegal
+Data::(X,Y)  // illegal
+```
+
+Only interpretation tokens may be used with the `::` operator.
 
 ---
 
-### 8.2 Multiple Binds over the Same Data
+### 8.1 Binding Rules
+
+1. The action set must be non-empty.
+2. The action set is unordered.
+3. Duplicate actions are illegal.
+4. The action set is sealed at bind time.
+5. No additional actions may be introduced after binding.
+6. An interpretation token is uniquely identified by its data type and exact action set.
+7. Binding does not imply subtyping relationships.
+
+---
+
+### 8.2 Identity of Interpretation Tokens
+
+Interpretation tokens are **nominal declarations**.
+
+Each `bind` statement introduces a distinct interpretation token, even if:
+
+* The underlying data type is identical, and
+* The action sets are identical.
+
+Example:
 
 ```bliss
-bind X, Z as A;
-bind X, Z as B;
+bind (X), Data as A;
+bind (X), Data as B;
 ```
 
-Properties:
+`A` and `B` are distinct interpretation tokens.
 
-* `A` and `B` are distinct nominal types
-* Both implement `X`
-* Both have closed semantics
+They represent separate semantic commitments, even though they relate the same data type and action set.
+
+Interpretation token identity is therefore defined by declaration identity, not by structural equivalence of `(Data, ActionSet)`.
+
+No structural widening relationship exists between tokens.
+
+---
+
+### 8.3 Closed Semantics
+
+An interpretation token defines a closed semantic universe.
+
+For a value:
+
+```bliss
+Data::A v;
+```
+
+* Only actions in the token’s action set are accessible.
+* Reinterpretation into additional actions is forbidden.
+* Semantic widening is illegal.
+
+---
+
+### 8.4 Prohibited Forms
+
+The following are illegal:
+
+```bliss
+bind (), Data as A;          // empty action set
+bind (X, X), Data as A;      // duplicate actions
+Data::X;                     // action is not a token
+Data::(X,Y);                 // actions are not tokens
+```
+
+Binding never implies structural subtyping, automatic widening, or action inference.
 
 ---
 

@@ -1,5 +1,7 @@
 > This is a draft paper
 
+TODO: Binds are relationship entities.
+
 # Bliss: A Data–Action–Binding Semantic Model
 
 Mayukh Chakraborty
