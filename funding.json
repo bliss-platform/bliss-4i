@@ -14,6 +14,9 @@
       "guid": "bliss-4i",
       "name": "Bliss-4i Runtime & VM",
       "description": "A systems-oriented language laboratory implementing a dual-mode memory model (Value/Object), virtual pointer handles for safety without a GC, and a Data and Action Oriented Programming (DAOP) paradigm.",
+      "webpageUrl": {
+        "url": "https://bliss-platform.github.io/bliss-4i/"
+      },
       "repositoryUrl": {
         "url": "https://github.com/bliss-platform/bliss-4i"
       },
@@ -32,6 +35,7 @@
       {
         "guid": "bank-transfer",
         "type": "custom",
+        "url": "N/A",
         "description": "Direct bank transfer for institutional grants and research stipends. Details provided upon request to verify project milestones."
       },
       {
@@ -50,7 +54,10 @@
         "amount": 0,
         "currency": "INR",
         "frequency": "one-time",
-        "channels": ["bank-transfer", "github-sponsors"]
+        "channels": [
+          "bank-transfer",
+          "github-sponsors"
+        ]
       }
     ]
   }
