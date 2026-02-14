@@ -14,6 +14,8 @@ Bliss 4i is the first iteration intended for real public usage, open-source cont
 
 This website contains all the documents, specifications, articles and thought-process files that are relevant to the 4i platform version.
 
+Vist the repository:
+https://github.com/bliss-platform/bliss-4i
 ---
 
 ## Table of Contents
