@@ -15,7 +15,7 @@
       "name": "Bliss-4i Runtime & VM",
       "description": "A systems-oriented language laboratory implementing a dual-mode memory model (Value/Object), virtual pointer handles for safety without a GC, and a Data and Action Oriented Programming (DAOP) paradigm.",
       "repositoryUrl": {
-        "url": "https://github.com/bliss-platform/bliss-4i"
+        "url": "https://bliss-platform.github.io/bliss-4i/"
       },
       "tags": [
         "virtual-machine",
