@@ -22,6 +22,9 @@
       "repositoryUrl": {
         "url": "https://github.com/bliss-platform/bliss-4i"
       },
+      "licenses": [
+        "Apache-2.0"
+      ],
       "tags": [
         "virtual-machine",
         "runtime-development",
