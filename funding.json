@@ -4,6 +4,7 @@
   "entity": {
     "type": "individual",
     "name": "Mayukh Chakraborty",
+    "role": "maintainer",
     "description": "Systems researcher and student at UITBU developing high-performance runtime infrastructure and explicit-control language models.",
     "webpageUrl": {
       "url": "https://bliss-platform.github.io/bliss-4i/"
