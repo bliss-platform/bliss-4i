@@ -1,0 +1,57 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.1.0",
+  "entity": {
+    "type": "individual",
+    "name": "Mayukh Chakraborty",
+    "description": "Systems researcher and student at UITBU developing high-performance runtime infrastructure and explicit-control language models.",
+    "webpageUrl": {
+      "url": "https://github.com/bliss-platform"
+    }
+  },
+  "projects": [
+    {
+      "guid": "bliss-4i",
+      "name": "Bliss-4i Runtime & VM",
+      "description": "A systems-oriented language laboratory implementing a dual-mode memory model (Value/Object), virtual pointer handles for safety without a GC, and a Data and Action Oriented Programming (DAOP) paradigm.",
+      "repositoryUrl": {
+        "url": "https://github.com/bliss-platform/bliss-4i"
+      },
+      "tags": [
+        "virtual-machine",
+        "runtime-development",
+        "systems-programming",
+        "memory-safety",
+        "daop",
+        "low-level"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "bank-transfer",
+        "type": "custom",
+        "description": "Direct bank transfer for institutional grants and research stipends. Details provided upon request to verify project milestones."
+      },
+      {
+        "guid": "github-sponsors",
+        "type": "github",
+        "url": "https://github.com/sponsors/bliss-platform",
+        "description": "Professional support through GitHub Sponsors for recurring project sustainability."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "infrastructure-research",
+        "status": "active",
+        "name": "Infrastructure & Research Support",
+        "description": "Funding is requested to support maintainer stipends, bare-metal servers for deterministic benchmarking, and cross-platform testing for fiber-based concurrency.",
+        "amount": 0,
+        "currency": "INR",
+        "frequency": "one-time",
+        "channels": ["bank-transfer", "github-sponsors"]
+      }
+    ]
+  }
+}

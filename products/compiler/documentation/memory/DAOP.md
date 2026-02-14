@@ -52,8 +52,8 @@ A **data type** defines memory layout only.
 
 ```bliss
 data Data {
-    u64 byte_ptr;
-    u32 size;
+    hide u64 byte_ptr;
+    private u32 size;
 }
 ```
 
@@ -381,6 +381,13 @@ Qualification never introduces new semantics.
 
 Function parameters explicitly determine **which semantic layer is preserved** across the call boundary.
 
+Bliss supports four distinct parameter forms:
+
+1. Data parameters (representation only)
+2. Binded parameters (semantic identity preservation)
+3. Action parameters (behavior-only polymorphism)
+4. `with` parameters (representation + capability constraint)
+
 ---
 
 ### 10.1 Data Parameters (Semantic Erasure)
@@ -392,15 +399,18 @@ fx someStuff(Data x);
 Rules:
 
 * Accepts any binded type with underlying `Data`
-* All actions and meaning are stripped
-* Only raw data is visible
+* All actions and meaning are stripped at the boundary
+* Only raw data is visible inside the function
+* Implicit stripping may produce a compiler warning (equivalent to `ext`)
 
 ```bliss
 Data::A a;
 Data::B b;
+Data::(A, B) c;
 
-someStuff(a);   // valid
+someStuff(a);   // valid (semantic erasure)
 someStuff(b);   // valid
+someStuff(c);   // valid
 ```
 
 ---
@@ -413,13 +423,23 @@ fx process(Data::A a);
 
 Rules:
 
-* Bind must match exactly
-* Meaning is guaranteed
-* No reinterpretation allowed
+* The provided bind must contain at least the action set required by `A`
+* Compatibility is defined by action-set inclusion
+* Meaning associated with `A` is guaranteed inside the function
+* No reinterpretation is allowed
+
+If `S(T)` denotes the action set of bind `T`, then:
+
+```
+Data::T satisfies Data::A
+iff
+S(A) ⊆ S(T)
+```
 
 ```bliss
 process(a);   // valid
 process(b);   // invalid
+process(c);   // valid if c contains at least A's action set
 ```
 
 ---
@@ -427,22 +447,63 @@ process(b);   // invalid
 ### 10.3 Action Parameters (Behavioral Polymorphism)
 
 ```bliss
-fx doThing(ActionType x);
+fx doThing(x with ActionType);
 ```
 
 Rules:
 
-* Any binded type implementing the action is accepted
+* Any binded type implementing `ActionType` is accepted
 * Underlying data is inaccessible
-* Only behavior is visible
+* Only behavior defined in the action is visible
+* No semantic identity is preserved
 
 ```bliss
-Data1::ActionType a;
-Data2::ActionType b;
+Data1::X a;
+Data2::Y b;
 
-doThing(a);
-doThing(b);
+//X binds ActionType with Data, Y does not
+
+doThing(a); //valid
+doThing(b); //invalid
 ```
+
+---
+
+### 10.4 `with` Parameters (Representation + Capability)
+
+```bliss
+fx log(u8[][] str with (ActionGroup));
+```
+
+The `with` form defines a **compound parameter type** consisting of:
+
+* An exact underlying data type
+* A required action set
+
+Rules:
+
+* The underlying data type must match exactly
+* The provided bind must contain the required action set
+* Both representation and capability are available inside the function
+* No specific interpretation token is required
+
+Formally, a value `Data::T` satisfies:
+
+```
+D with (A1, A2, ..., An)
+```
+
+iff:
+
+1. The underlying data type is exactly `D`
+2. `{A1, A2, ..., An} ⊆ S(T)`
+
+This differs from `::`:
+
+* `Data::A` requires a specific semantic interpretation
+* `Data with (A)` requires capability but not token identity
+
+The `with` construct does not create new semantic identity. It expresses a boundary constraint combining representation and behavior.
 
 ---
 
@@ -612,36 +673,36 @@ Bliss refines this behavior using a small set of **field modifiers**. These modi
 
 The available modifiers are:
 
-* `private`
 * `hide`
+* `private`
 * `readonly`
 
 They may be used individually or in combination.
 
 ---
 
-### 17.1 `private`
+### 17.1 `hide`
 
-`private` is the **strongest** field modifier.
+`hide` is the **strongest** field modifier.
 
-A `private` field is:
+A `hide` field is:
 
 * Visible **only during construction** of the data value
 * Completely inaccessible afterward
 * Not readable or writable by actions
 * Not part of the observable semantic state
 
-`private` fields exist solely for **runtime or native-layer mechanisms**, such as internal handles, storage anchors, or capability tokens.
+`hide` fields exist solely for **runtime or native-layer mechanisms**, such as internal handles, storage anchors, or capability tokens.
 
 They are intentionally excluded from DAOP reasoning.
 
 ---
 
-### 17.2 `hide`
+### 17.2 `private`
 
-`hide` restricts field visibility to **actions only**.
+`private` restricts field visibility to **actions only**.
 
-A `hide` field is:
+A `private` field is:
 
 * Invisible to user-level code
 * Fully accessible within actions bound to the data
@@ -685,8 +746,8 @@ Such fields are useful for **internal constants**, cached metadata, or invariant
 
 Field modifiers in Bliss refine *access* and *mutability* without altering the DAOP model itself:
 
-* `private` removes a field from semantic visibility entirely
-* `hide` limits visibility to actions
+* `hide` removes a field from semantic visibility entirely
+* `private` limits visibility to actions
 * `readonly` limits mutability to construction time
 
 Together, these modifiers allow precise control over data representation while keeping data–action separation explicit and intact.
