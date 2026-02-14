@@ -8,3 +8,5 @@ favicon_ico: "/bliss_fav.ico"
 just_the_docs:
   exclude:
     - 'README.md'
+
+include: [".well-known"]
