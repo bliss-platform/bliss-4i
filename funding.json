@@ -39,7 +39,7 @@
     "channels": [
       {
         "guid": "bank-transfer",
-        "type": "custom",
+        "type": "bank",
         "url": "N/A",
         "description": "Direct bank transfer for institutional grants and research stipends. Details provided upon request to verify project milestones."
       },
