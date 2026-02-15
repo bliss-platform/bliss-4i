@@ -17,7 +17,7 @@ hero:
       link: /runtime/
 
   image:
-    src: ./assets/logo.svg
+    src: /logo.svg
     alt: Bliss Logo
   
   align: center
