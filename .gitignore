@@ -2,3 +2,4 @@ packager/.dart_tool/
 test
 build
 /node_modules
+/docs/.vitepress/dist

@@ -1,9 +1,3 @@
----
-title: Packager Specification
-nav_order: 1
-parent: Packager
----
-
 # The Bliss Package Manager Specification
 
 The bliss package manager is responsible for managing the following concepts:

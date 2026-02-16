@@ -4,7 +4,9 @@ layout: home
 hero:
   name: "The Bliss Platform"
   text: "An Ecosystem for Building Software"
-  tagline: Compiler • Interpreter • Runtime • Package Manager
+  tagline: >
+    A cohesive set of tools engineered to define, compile, execute,
+    and distribute Bliss programs.
   actions:
     - theme: brand
       text: Language
@@ -23,27 +25,33 @@ hero:
   align: center
 
 features:
-  - title: Language
+  - icon: 💬
+    title: Language
     details: Core syntax, semantics, and error model of Bliss.
     link: /language/
 
-  - title: Compiler
+  - icon: 🛠️
+    title: Compiler
     details: Frontend, IR design, and code generation strategy.
     link: /compiler/
 
-  - title: Interpreter
+  - icon: 🌊
+    title: Interpreter
     details: Waterfall engine architecture and execution model.
     link: /interpreter/
 
-  - title: Runtime
+  - icon: ⚙️
+    title: Runtime
     details: Vortex engine and memory management.
     link: /runtime/
 
-  - title: Package Manager
+  - icon: 📦
+    title: Package Manager
     details: Dependency resolution and project structure.
-    link: /package-manager/
+    link: /packager/
 
-  - title: Articles
+  - icon: 📚
+    title: Articles
     details: Universal Specifications and deeper system philosophy.
     link: /articles/
 ---
