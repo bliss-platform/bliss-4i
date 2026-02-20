@@ -1,0 +1,27 @@
+scope Math;
+
+fx privateStuff() {
+	//cannot be accessed because it not under any scope.
+};
+
+//define a sub-scope here
+Math.SubScope {
+
+};
+
+Math {
+	
+	//private by default
+	fx add(int a, int b): int {
+		return a + b;
+	}
+	
+	fx doSomeStuff() {
+		privateStuff(); //this is valid.
+	}
+	
+};
+
+pub fx Math.sub(int a, int b): int {
+	return a - b;
+};

@@ -1,0 +1,11 @@
+struct X {
+	
+	int a;
+	int b;
+	
+	//inline methods!
+	fx doSomething(X this): void {
+	
+	}
+	
+}

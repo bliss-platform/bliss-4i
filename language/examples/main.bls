@@ -1,5 +1,0 @@
-using package;
-
-std.console.log(
-	"Sum of two numbers: { math.add( 10 + 20 ) }"
-);

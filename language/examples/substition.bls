@@ -1,8 +1,0 @@
-//This is a concept of substition that can be used in place of variables.
-
-//this is never created in memory.
-sub is_user_active = someUser.isActive();
-
-if ( is_user_active	) {
-	//do stuff
-} 
