@@ -1,14 +1,73 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+pub enum StructureToken {
+    LeftParen, RightParen // ( )
+    LeftBrace, RightBrace // { }
+    LeftBracket, RightBracket // [ ]
+    Comma, SemiColon // , ;
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub enum KeywordToken {
+    Fx,
+    Data, Action, Bind,
+    If, Elif, Else,
+    For,
+    Return,
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+pub enum MathToken {
+    Plus,
+    Minus,
+    Multiply,
+    Divide,
+    GreaterThan,
+    LessThan,
+    Equal,
+}
+
+pub enum TokenKind {
+    Number(f64),
+    Identifier(String),
+    Math(MathToken),
+    Keyword(KeywordToken),
+    Structure(StructureToken),
+}
+
+pub struct Token {
+    kind: TokenKind,
+    line: usize,
+    column: usize,
+}
+
+enum LexicalState {
+    Default,
+    StringLiteral,
+    Comment,
+}
+
+pub fn tokenize( input: &str ) -> Vector<Token> {
+    // Tokenization logic goes here
+    let mut tokens = Vector<Token>::new();
+    let mut buffer = Vector<char>::new();
+    let mut state = LexicalState::Default;
+
+    for (line_num, line) in input.lines().enumerate() {
+        for (col_num, ch) in line.chars().enumerate() {
+
+            buffer.push(ch); //first add the character to the buffer, then decide what to do with it based on the state
+
+            match state {
+                LexicalState::Default => {
+                    
+                    
+
+                },
+                LexicalState::StringLiteral => {
+                    // Handle string literal state
+                },
+                LexicalState::Comment => {
+                    // Handle comment state
+                },
+            }
+        }
     }
+
 }
