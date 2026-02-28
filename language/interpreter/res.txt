@@ -1,0 +1,373 @@
+
+====================================
+Running: tests/test_01_basic_structure.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: UserData ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32 ]
+Token: [ Literal: age ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: name ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: String ]
+Token: [ Literal: ask ]
+Token: [ Symbol: = ]
+Token: [ String: \"Hello World\" ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_02_no_whitespace.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: User ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32age ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringname ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: Stringask ]
+Token: [ Symbol: = ]
+Token: [ String: Hello ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_03_extreme_whitespace.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: UserData ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32 ]
+Token: [ Literal: age ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: name ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: String ]
+Token: [ Literal: ask ]
+Token: [ Symbol: = ]
+Token: [ String: Hello World ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_04_identifier_edges.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: _User_123 ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32 ]
+Token: [ Literal: _age1 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: __name__ ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: String ]
+Token: [ Literal: __value_99 ]
+Token: [ Symbol: = ]
+Token: [ String: ok ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_05_adjacent_symbols.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: Test ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32 ]
+Token: [ Literal: x ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: y ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: String ]
+Token: [ Literal: a ]
+Token: [ Symbol: = ]
+Token: [ String: A ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: b ]
+Token: [ Symbol: = ]
+Token: [ String: B ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: c ]
+Token: [ Symbol: = ]
+Token: [ String: C ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_06_string_escapes.txt
+====================================
+STDOUT:
+Token: [ Literal: String ]
+Token: [ Literal: a ]
+Token: [ Symbol: = ]
+Token: [ String: Hello\nWorld ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: b ]
+Token: [ Symbol: = ]
+Token: [ String: \"Quoted\" ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: c ]
+Token: [ Symbol: = ]
+Token: [ String: \\Backslash\\";
+String d =  ]
+Token: [ Literal: Mix ]
+Token: [ String: \Esc\" and \\slash\\ test ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_07_unterminated_string.txt
+====================================
+STDOUT:
+Token: [ Literal: String ]
+Token: [ Literal: bad ]
+Token: [ Symbol: = ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_08_numbers_vs_identifiers.txt
+====================================
+STDOUT:
+Token: [ Literal: i32x ]
+Token: [ Symbol: = ]
+Token: [ Number: 10 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: x10 ]
+Token: [ Symbol: = ]
+Token: [ Number: 20 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: abc123def ]
+Token: [ Symbol: = ]
+Token: [ Number: 30 ]
+Token: [ Symbol: ; ]
+Token: [ Number: 123 ]
+Token: [ Literal: abc ]
+Token: [ Symbol: = ]
+Token: [ Number: 40 ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_09_nested_blocks.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: Outer ]
+Token: [ Symbol: { ]
+Token: [ Literal: data ]
+Token: [ Literal: Inner ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32 ]
+Token: [ Literal: x ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: String ]
+Token: [ Literal: name ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_10_symbols_glued.txt
+====================================
+STDOUT:
+Token: [ Literal: a ]
+Token: [ Symbol: = ]
+Token: [ Number: 10 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: b ]
+Token: [ Symbol: = ]
+Token: [ Number: 20 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: c ]
+Token: [ Symbol: = ]
+Token: [ Number: 30 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: x ]
+Token: [ Symbol: > ]
+Token: [ Symbol: > ]
+Token: [ Symbol: = ]
+Token: [ Number: 5 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: y ]
+Token: [ Symbol: < ]
+Token: [ Symbol: < ]
+Token: [ Symbol: = ]
+Token: [ Number: 2 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: z ]
+Token: [ Symbol: > ]
+Token: [ Symbol: = ]
+Token: [ Symbol: 1 ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_11_unicode.txt
+====================================
+STDOUT:
+Token: [ Literal: String ]
+Token: [ Literal: caf ]
+Token: [ Symbol: é ]
+Token: [ Symbol: = ]
+Token: [ String: naïve ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_12_eof_no_newline.txt
+====================================
+STDOUT:
+Token: [ Literal: String ]
+Token: [ Literal: x ]
+Token: [ Symbol: = ]
+Token: [ String: EOF test ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_13_long_line.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: Big ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32a ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32b ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32c ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32d ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32e ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32f ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32g ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32h ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32i ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32j ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringname ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringvalue ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringanother ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringmore ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringfinal ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_14_empty_file.txt
+====================================
+Exit Code: 0
+
+====================================
+Running: tests/test_15_only_whitespace.txt
+====================================
+Exit Code: 0
+
+====================================
+Running: tests/test_16_string_edge_combo.txt
+====================================
+STDOUT:
+Token: [ Literal: String ]
+Token: [ Literal: a ]
+Token: [ Symbol: = ]
+Token: [ String: \" ]
+Token: [ Symbol: ; ]
+Token: [ Literal: String ]
+Token: [ Literal: b ]
+Token: [ Symbol: = ]
+Token: [ String: \\";
+String c= ]
+Token: [ Symbol: \ ]
+Token: [ Symbol: \ ]
+Token: [ Symbol: \ ]
+Token: [ Symbol: \ ]
+Token: [ String: ;
+String d= ]
+Token: [ String: \\\\"\" ]
+Token: [ Symbol: ; ]
+
+Exit Code: 0
+
+====================================
+Running: tests/test_17_realistic_combo.txt
+====================================
+STDOUT:
+Token: [ Literal: data ]
+Token: [ Literal: _User123 ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32age ]
+Token: [ Symbol: ; ]
+Token: [ Literal: Stringname ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Literal: Stringask ]
+Token: [ Symbol: = ]
+Token: [ String: Hello\"World\" ]
+Token: [ Symbol: ; ]
+Token: [ Literal: i32x ]
+Token: [ Symbol: = ]
+Token: [ Number: 10 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: y ]
+Token: [ Symbol: = ]
+Token: [ Number: 20 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: z ]
+Token: [ Symbol: = ]
+Token: [ Number: 30 ]
+Token: [ Symbol: ; ]
+Token: [ Literal: dataInner ]
+Token: [ Symbol: { ]
+Token: [ Literal: dataDeep ]
+Token: [ Symbol: { ]
+Token: [ Literal: i32v ]
+Token: [ Symbol: ; ]
+Token: [ Symbol: } ]
+Token: [ Symbol: } ]
+
+Exit Code: 0

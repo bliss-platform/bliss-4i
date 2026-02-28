@@ -1,0 +1,13 @@
+data _User123{
+i32age;
+Stringname;
+}
+
+Stringask="Hello\"World\"";
+i32x=10;y=20;z=30;
+
+dataInner{
+dataDeep{
+i32v;
+}
+}

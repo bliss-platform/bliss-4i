@@ -1,0 +1,6 @@
+data Outer{
+    data Inner{
+        i32 x;
+    }
+    String name;
+}

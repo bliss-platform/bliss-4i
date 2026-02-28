@@ -1,0 +1,16 @@
+
+
+
+data      UserData
+
+{
+	i32     age   ;
+	String	name	;
+}
+
+
+
+String    ask    =    "Hello World"   ;
+
+
+

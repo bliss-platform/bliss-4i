@@ -1,0 +1,1 @@
+data User{i32age;Stringname;}Stringask="Hello";

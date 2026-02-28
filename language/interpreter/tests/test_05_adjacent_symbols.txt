@@ -1,0 +1,2 @@
+data Test{i32 x;;String y;;;}
+String a="A";String b="B";String c="C";

@@ -1,0 +1,4 @@
+String a = "Hello\nWorld";
+String b = "\"Quoted\"";
+String c = "\\Backslash\\";
+String d = "Mix \"Esc\" and \\slash\\ test";

@@ -1,0 +1,6 @@
+data _User_123 {
+    i32 _age1;
+    String __name__;
+}
+
+String __value_99 = "ok";
