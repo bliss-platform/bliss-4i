@@ -1,292 +1,184 @@
-# bliss-4i
+# ⚡ bliss-4i
 
-> A research project exploring language design, runtime development, compiler architecture, and full‑pipeline execution.
+> **A language laboratory exploring the intersection of static analysis, reference counting, and manual memory management.**
 
----
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Status](https://img.shields.io/badge/Status-Active_Research-orange.svg)]()
 
-## Overview
+**bliss-4i** is an experimental research project focused on systems-oriented language design, compiler architecture, and full-pipeline execution. 
 
-**bliss-4i** is a research project focused on exploring:
-
-* Programming language design
-* Runtime and memory model development
-* Compiler and interpreter architecture
-* Resource management (packages, modules, dependency resolution, build semantics)
-* The full language pipeline: parsing → analysis → IR → execution
-
-The project is intentionally experimental and iterative. Its purpose is to understand how modern languages are built *end‑to‑end*, and to prototype ideas around safety, performance, and explicit control at both compile time and runtime.
-
-This repository is therefore best viewed as a **language laboratory**, not a finished product.
-
-### About AI usage
-
-AI tools are used as a development aid in this project, mainly for:
-
-* Summarizing research papers and technical articles
-* Discovering and comparing existing language and runtime designs
-* Citing and organizing references and learning resources
-* Assisting with debugging, design reviews, and documentation
-
-All architectural decisions, implementations, and experiments are ultimately reviewed and directed by a human, but AI is treated as a productivity and research accelerator.
+⚠️ **Current Status:** *Active research and prototyping phase. Expect breaking changes, experimental semantics, and incomplete documentation.*
 
 ---
 
-## Design Philosophy
+## 🔍 What is this project about?
 
-bliss is built around a few core ideas:
+Bliss is not just a language syntax; it is a full ecosystem designed to prototype ideas around safety, predictable performance, and explicit control at both compile time and runtime. Its primary purpose is to understand how modern languages are built end-to-end.
 
-### 1. Explicit Over Implicit
+Rather than forcing a single execution paradigm, the Bliss platform is architected to consist of a **managed runtime, an interpreter, and an Ahead-of-Time (AOT) compiler**. It targets the same problem domains as traditional systems languages—such as runtimes, engines, OS components, and low-level services.
 
-Nothing happens "magically" at runtime unless the programmer opts into it.
+### The Pipeline Architecture
 
-Memory ownership, reference counting, borrowing, and movement are all *visible concepts* in the language.
+Below is a high-level visualization of how the bliss-4i pipeline handles code from source to execution:
 
-### 2. Layered Safety
-
-Instead of choosing one model, bliss supports multiple safety layers:
-
-| Layer              | Purpose                                                        |
-| ------------------ | -------------------------------------------------------------- |
-| Static analysis    | Detect ownership chains, invalid lifetimes, and aliasing risks |
-| Reference counting | Automatic memory reclamation when safe                         |
-| Manual memory      | Escape hatch for full control                                  |
-
-Each layer can be used independently or together.
-
-### 3. Pay Only for What You Use
-
-Features like atomic reference counting, runtime checks, or tracing are opt-in.
-
-The compiler should be able to remove unused safety layers entirely.
-
-### 4. Runtime Transparency
-
-You should be able to understand:
-
-* Where memory is allocated
-* Who owns it
-* When it is freed
-* Why it is freed
-
-No hidden GC cycles. No opaque memory behavior.
-
----
-
-## What does "4i" mean?
-
-"4i" refers to the **fourth iteration** of the language and runtime architecture.
-
-Earlier iterations explored:
-
-* Pure manual memory management
-* Pure reference counting
-* Rust-like strict ownership
-
-This version combines all three in a unified model.
-
----
-
-## Key Features
-
-### Ownership & Borrowing (Static Analysis)
-
-The compiler tracks:
-
-* Ownership chains
-* Immutable borrows
-* Mutable borrows
-* Escaping references
-
-But unlike Rust:
-
-* The rules are *configurable*
-* Violations can be warnings instead of hard errors
-* Runtime fallback is possible
-
-### Reference Counting (ARC)
-
-Objects can be placed under automatic reference counting:
-
-* Atomic by default
-* Can be downgraded to non-atomic in single-threaded contexts
-* Compiler can elide RC when provably unnecessary
-
-### Manual Memory Support
-
-You can still:
-
-* Allocate raw memory
-* Control object layout
-* Use custom allocators
-* Manage lifetimes manually
-
-### Multi-layer Deallocation Model
-
-Objects can be freed by:
-
-1. Static proof (compile-time)
-2. Reference count reaching zero
-3. Explicit `free`
-
-The compiler chooses the fastest valid strategy.
-
-### Systems-oriented Design
-
-Although bliss-4i is currently **interpreted**, it is designed with systems-level concerns in mind:
-
-* Explicit memory management
-* Predictable performance characteristics
-* Control over allocation and object layout
-* Runtime transparency
-* Minimal hidden costs
-
-It targets the same *problem domain* as systems languages (runtimes, engines, OS components, low-level services), even if the current execution model is interpreted rather than ahead-of-time compiled.
-
-It is therefore best described as a **systems-oriented language and runtime experiment**, not a traditional scripting language.
-
-It is not aimed at rapid prototyping or general-purpose scripting.
-
----
-
-## Project Structure
+```mermaid
+flowchart TD
+    A[Source Code .bls] --> B[Frontend Compiler]
+    B --> C{Static Analysis}
+    
+    C -->|Borrow Checking & Ownership| D[Intermediate Representation IR]
+    C -->|Warnings/Errors| E([Developer Feedback])
+    
+    D --> F{Execution Targets}
+    
+    F -->|Development/Testing| G[Interpreter]
+    F -->|Production/Systems| H[AOT Compiler]
+    
+    G --> I[(Managed Runtime)]
+    H --> I
+    
+    I --> J[Atomic Reference Counting ARC]
+    I --> K[Manual Memory Subsystem]
+    I --> L[Concurrency / Fibres]
 
 ```
-bliss-4i/
-├── compiler/        # Frontend + type system + borrow analysis
-├── runtime/         # Memory manager, RC implementation, threading
-├── stdlib/          # Core language library
-├── tests/           # Compiler + runtime tests
-├── examples/        # Example programs
-├── docs/            # Design documents
-└── tools/           # Build tools and experiments
+
+---
+
+## 🧠 The Bliss Philosophy
+
+Bliss is built around a few uncompromising core ideas:
+
+* **Explicit Over Implicit:** Nothing happens "magically" at runtime unless you opt into it. Memory ownership, borrowing, and movement are visible concepts.
+* **Layered Safety:** Instead of forcing a single paradigm, Bliss supports multiple, composable safety layers.
+* **Pay Only for What You Use:** Features like atomic reference counting and runtime checks are opt-in. The compiler entirely removes unused safety layers.
+* **Runtime Transparency:** You always know where memory is allocated, who owns it, and when/why it is freed. No hidden GC cycles.
+
+---
+
+## 🧬 The "4i" Convention
+
+"4i" refers to the **fourth iteration** of the language and runtime architecture. Earlier iterations explored pure manual management, pure reference counting, and strict ownership. This version unifies all three into a multi-layer deallocation model.
+
+The compiler analyzes the code and chooses the fastest valid strategy for freeing objects:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Allocation
+    Allocation --> StaticProof : Compiler Analysis
+    
+    state StaticProof {
+        [*] --> ProvableLifetime
+        ProvableLifetime --> CompileTimeFree : Dropped via Scope/Ownership
+    }
+    
+    Allocation --> DynamicTracking : Unprovable/Escaping
+    
+    state DynamicTracking {
+        [*] --> ARC
+        ARC --> ZeroCount : RefCount == 0
+        ZeroCount --> RuntimeFree
+    }
+    
+    Allocation --> ManualControl : Opt-in Unsafe/Raw
+    
+    state ManualControl {
+        [*] --> CustomAllocator
+        CustomAllocator --> ExplicitFree : Developer calls free()
+    }
+
 ```
 
-(Structure may change as the project evolves.)
+1. **Static Proof (Compile-time):** Tracks ownership chains and lifetimes. Rule violations can be configured as warnings rather than hard errors, allowing runtime fallbacks.
+2. **Reference Counting (ARC):** Automatic memory reclamation when statically unprovable. Atomic by default, but downgradeable in single-threaded contexts.
+3. **Explicit `free`:** Full manual control with custom allocators and raw memory layouts for ultimate systems-level performance.
 
 ---
 
-## Current Status
+## 💻 Conceptual Examples
 
-bliss-4i is currently in **active research & prototyping** phase.
-
-Expect:
-
-* Breaking changes
-* Incomplete documentation
-* Unstable syntax
-* Experimental semantics
-
-This project is not production-ready.
-
----
-
-## Examples (Conceptual)
+**Ranges & Iteration**
 
 ```bliss
-std::console.log("Hello World!");
-```
-
-```bliss
-//ranges are fun little thing that makes iteration easier in bliss
-
-//ranges are explicit in bliss now!
-for ( int i; 0 <= i < 5; i++ ) {
-	
+// Ranges are explicit and make iteration intuitive
+for (int i; 0 <= i < 5; i++) {
+    // ...
 }
 
-if ( a < b <= c ) {
-	//range operator
+if (a < b <= c) {
+    // Range operator logic
 }
+
 ```
+
+**Scoping & Visibility**
 
 ```bliss
 scope Math;
 
 fx privateStuff() {
-	//cannot be accessed because it not under any scope.
+    // Cannot be accessed because it is not under any scope.
 };
 
-//define a sub-scope here
+// Define a sub-scope
 Math::SubScope::{
-
+    // ...
 };
 
 Math::{
-	
-	//private by default
-	fx add(int a, int b): int {
-		return a + b;
-	}
-	
-	fx doSomeStuff() {
-		privateStuff(); //this is valid.
-	}
-	
+    // Private by default
+    fx add(int a, int b): int {
+        return a + b;
+    }
+    
+    fx doSomeStuff() {
+        privateStuff(); // This is valid.
+    }
 };
 
 pub fx Math::sub(int a, int b): int {
-	return a - b;
+    return a - b;
 };
+
 ```
 
-(Exact syntax may differ.)
+*(Note: Exact syntax is subject to change as the language evolves.)*
 
 ---
 
-## Non-goals
+## 🏗️ Repository Structure
 
-bliss intentionally does **not** aim to:
+```text
+bliss-4i/
+├── compiler/        # Frontend + type system + borrow analysis
+├── runtime/         # Memory manager, RC implementation, 
+├── stdlib/          # Core language library
+├── tests/           # Compiler + runtime tests
+├── examples/        # Example programs
+├── docs/            # Design documents
+└── tools/           # Build tools and experiments
 
-* Be simple
-* Be beginner-friendly
-* Replace mainstream languages
-* Hide memory management
-
-This is a research-driven systems language.
-
----
-
-## Contributing
-
-If you're interested in:
-
-* Compiler design
-* Memory models
-* Runtime systems
-* Programming language theory
-
-Contributions, discussions, and design feedback are welcome.
+```
 
 ---
 
-## Roadmap (High level)
+## 🛑 Non-Goals
 
-* [ ] Complete ownership + borrow checker
-* [ ] Stable IR
-* [ ] Pluggable allocator API
-* [ ] Deterministic ARC optimizations
-* [ ] Minimal standard library
-* [ ] Self-hosting compiler prototype
+Bliss intentionally does **not** aim to:
 
----
-
-## License
-Apache-2.0
+* Be simple or beginner-friendly.
+* Serve as a rapid prototyping or general-purpose scripting language.
+* Hide memory management.
+* Replace mainstream production languages.
 
 ---
 
-## Why this exists
+## 🔒 Contributing
 
-bliss-4i exists to answer questions like:
+**At this time, I am not accepting Pull Requests (PRs) or external code contributions.** This repository operates strictly as a personal research and language laboratory. Because the architecture, syntax, and memory models are undergoing rapid, experimental iterations, external contributions are currently closed to maintain a focused development trajectory.
 
-* Can we statically reason about *most* memory while still allowing escape hatches?
-* Can ARC be competitive with modern ownership-based models?
-* Can language design reduce memory bugs *without* sacrificing systems-level control?
-
-This project is a long-term exploration of those ideas.
+However, if you are interested in compiler design, memory models, runtime systems, or programming language theory, **discussions, issues, and design feedback are highly welcome!**
 
 ---
 
-If you are confused by the project, that is expected.
-
-bliss-4i is not a product yet. It is a language laboratory.
+**A note on AI usage:** AI tools are used strictly as a development aid (summarizing research papers, discovering language designs, debugging, and documentation). All architectural decisions, implementations, and experiments are reviewed, directed, and authored by a human.
