@@ -1,1 +1,0 @@
-import{_ as e,o as a,c as t}from"./chunks/framework.dzkBsiyx.js";const l=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"language/index.md","filePath":"language/index.md"}'),n={name:"language/index.md"};function r(o,s,c,d,i,p){return a(),t("div")}const m=e(n,[["render",r]]);export{l as __pageData,m as default};
