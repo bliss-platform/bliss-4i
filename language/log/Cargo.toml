@@ -1,7 +1,6 @@
 [package]
-name = "compiler"
+name = "log"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-log={ path = "../log" }

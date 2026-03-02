@@ -12,8 +12,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cli"
+version = "0.1.0"
+
+[[package]]
 name = "compiler"
 version = "0.1.0"
+dependencies = [
+ "log",
+]
 
 [[package]]
 name = "frontend"
@@ -25,6 +32,10 @@ version = "0.1.0"
 dependencies = [
  "regex",
 ]
+
+[[package]]
+name = "log"
+version = "0.1.0"
 
 [[package]]
 name = "memchr"

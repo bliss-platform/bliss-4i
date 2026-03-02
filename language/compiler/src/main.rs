@@ -1,3 +1,5 @@
+use log::visual_test;
+
 fn main() {
-    println!("Hello, world!");
+    visual_test();
 }

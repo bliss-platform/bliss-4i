@@ -4,4 +4,4 @@ members = [
     "frontend",
     "interpreter",
     "compiler"
-]
+, "cli", "log"]
