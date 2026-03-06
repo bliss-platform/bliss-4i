@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 regex = "1.12.3"
 # frontend = { path = "../frontend" } for now, we are going to use lazer focus.`
+log = {path = "../log"}

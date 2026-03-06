@@ -2,6 +2,18 @@
 ====================================
 Running: tests/test_01_basic_structure.txt
 ====================================
+
+Input:
+====================================
+data UserData {
+    i32 age;
+    String name;
+}
+
+String ask = "\"Hello World\""
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: UserData ]
@@ -23,6 +35,12 @@ Exit Code: 0
 ====================================
 Running: tests/test_02_no_whitespace.txt
 ====================================
+
+Input:
+====================================
+data User{i32age;Stringname;}Stringask="Hello";
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: User ]
@@ -41,6 +59,28 @@ Exit Code: 0
 ====================================
 Running: tests/test_03_extreme_whitespace.txt
 ====================================
+
+Input:
+====================================
+
+
+
+data      UserData
+
+{
+	i32     age   ;
+	String	name	;
+}
+
+
+
+String    ask    =    "Hello World"   ;
+
+
+
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: UserData ]
@@ -63,6 +103,18 @@ Exit Code: 0
 ====================================
 Running: tests/test_04_identifier_edges.txt
 ====================================
+
+Input:
+====================================
+data _User_123 {
+    i32 _age1;
+    String __name__;
+}
+
+String __value_99 = "ok";
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: _User_123 ]
@@ -85,6 +137,14 @@ Exit Code: 0
 ====================================
 Running: tests/test_05_adjacent_symbols.txt
 ====================================
+
+Input:
+====================================
+data Test{i32 x;;String y;;;}
+String a="A";String b="B";String c="C";
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: Test ]
@@ -120,41 +180,61 @@ Exit Code: 0
 ====================================
 Running: tests/test_06_string_escapes.txt
 ====================================
-STDOUT:
-Token: [ Literal: String ]
-Token: [ Literal: a ]
-Token: [ Symbol: = ]
-Token: [ String: Hello\nWorld ]
-Token: [ Symbol: ; ]
-Token: [ Literal: String ]
-Token: [ Literal: b ]
-Token: [ Symbol: = ]
-Token: [ String: \"Quoted\" ]
-Token: [ Symbol: ; ]
-Token: [ Literal: String ]
-Token: [ Literal: c ]
-Token: [ Symbol: = ]
-Token: [ String: \\Backslash\\";
-String d =  ]
-Token: [ Literal: Mix ]
-Token: [ String: \Esc\" and \\slash\\ test ]
-Token: [ Symbol: ; ]
 
-Exit Code: 0
+Input:
+====================================
+String a = "Hello\nWorld";
+String b = "\"Quoted\"";
+String c = "\\Backslash\\";
+String d = "Mix \"Esc\" and \\slash\\ test";
+
+====================================
+
+STDERR:
+[38;5;141m4IR001[0m [[38;5;117mINTERPRETER[0m::[38;5;203mERROR[0m]
+Invalid Newline
+[2mStrings cannot contain newlines
+  |
+3 | String c = "\\Backslash\\";
+  |                        ^[0m
+
+
+Exit Code: 1
 
 ====================================
 Running: tests/test_07_unterminated_string.txt
 ====================================
-STDOUT:
-Token: [ Literal: String ]
-Token: [ Literal: bad ]
-Token: [ Symbol: = ]
 
-Exit Code: 0
+Input:
+====================================
+String bad = "Hello World;
+
+====================================
+
+STDERR:
+[38;5;141m4IR001[0m [[38;5;117mINTERPRETER[0m::[38;5;203mERROR[0m]
+Invalid Newline
+[2mStrings cannot contain newlines
+  |
+1 | String bad = "Hello World;
+  |                           ^[0m
+
+
+Exit Code: 1
 
 ====================================
 Running: tests/test_08_numbers_vs_identifiers.txt
 ====================================
+
+Input:
+====================================
+i32x = 10;
+x10 = 20;
+abc123def = 30;
+123abc = 40;
+
+====================================
+
 STDOUT:
 Token: [ Literal: i32x ]
 Token: [ Symbol: = ]
@@ -179,6 +259,18 @@ Exit Code: 0
 ====================================
 Running: tests/test_09_nested_blocks.txt
 ====================================
+
+Input:
+====================================
+data Outer{
+    data Inner{
+        i32 x;
+    }
+    String name;
+}
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: Outer ]
@@ -200,6 +292,16 @@ Exit Code: 0
 ====================================
 Running: tests/test_10_symbols_glued.txt
 ====================================
+
+Input:
+====================================
+a=10;b=20;c=30;
+x>>=5;
+y<<=2;
+z>=1;
+
+====================================
+
 STDOUT:
 Token: [ Literal: a ]
 Token: [ Symbol: = ]
@@ -236,6 +338,13 @@ Exit Code: 0
 ====================================
 Running: tests/test_11_unicode.txt
 ====================================
+
+Input:
+====================================
+String café = "naïve";
+
+====================================
+
 STDOUT:
 Token: [ Literal: String ]
 Token: [ Literal: caf ]
@@ -249,6 +358,13 @@ Exit Code: 0
 ====================================
 Running: tests/test_12_eof_no_newline.txt
 ====================================
+
+Input:
+====================================
+String x = "EOF test"
+
+====================================
+
 STDOUT:
 Token: [ Literal: String ]
 Token: [ Literal: x ]
@@ -260,6 +376,13 @@ Exit Code: 0
 ====================================
 Running: tests/test_13_long_line.txt
 ====================================
+
+Input:
+====================================
+data Big{i32a;i32b;i32c;i32d;i32e;i32f;i32g;i32h;i32i;i32j;Stringname;Stringvalue;Stringanother;Stringmore;Stringfinal;}
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: Big ]
@@ -301,41 +424,73 @@ Exit Code: 0
 ====================================
 Running: tests/test_14_empty_file.txt
 ====================================
+
+Input:
+====================================
+
+====================================
+
 Exit Code: 0
 
 ====================================
 Running: tests/test_15_only_whitespace.txt
 ====================================
+
+Input:
+====================================
+        
+	    
+
+====================================
+
 Exit Code: 0
 
 ====================================
 Running: tests/test_16_string_edge_combo.txt
 ====================================
-STDOUT:
-Token: [ Literal: String ]
-Token: [ Literal: a ]
-Token: [ Symbol: = ]
-Token: [ String: \" ]
-Token: [ Symbol: ; ]
-Token: [ Literal: String ]
-Token: [ Literal: b ]
-Token: [ Symbol: = ]
-Token: [ String: \\";
-String c= ]
-Token: [ Symbol: \ ]
-Token: [ Symbol: \ ]
-Token: [ Symbol: \ ]
-Token: [ Symbol: \ ]
-Token: [ String: ;
-String d= ]
-Token: [ String: \\\\"\" ]
-Token: [ Symbol: ; ]
 
-Exit Code: 0
+Input:
+====================================
+String a="\"";
+String b="\\";
+String c="\\\\";
+String d="\"\\\"\"";
+
+====================================
+
+STDERR:
+[38;5;141m4IR001[0m [[38;5;117mINTERPRETER[0m::[38;5;203mERROR[0m]
+Invalid Newline
+[2mStrings cannot contain newlines
+  |
+2 | String b="\\";
+  |             ^[0m
+
+
+Exit Code: 1
 
 ====================================
 Running: tests/test_17_realistic_combo.txt
 ====================================
+
+Input:
+====================================
+data _User123{
+i32age;
+Stringname;
+}
+
+Stringask="Hello\"World\"";
+i32x=10;y=20;z=30;
+
+dataInner{
+dataDeep{
+i32v;
+}
+}
+
+====================================
+
 STDOUT:
 Token: [ Literal: data ]
 Token: [ Literal: _User123 ]
