@@ -1,9 +1,3 @@
----
-title: CLI Convention for The Bliss Platform
-nav_order: 1
-parent: Articles
----
-
 # CLI Convention for The Bliss Platform
 
 For bliss-4i\

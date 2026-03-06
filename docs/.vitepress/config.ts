@@ -26,7 +26,8 @@ export default defineConfig({
           text: 'Articles',
           items: [
             { text: "CLI Convention", link: '/articles/cli-convention.md' },
-            { text: "LOG Convention", link: '/articles/log-convention.md' }
+            { text: "LOG Convention", link: '/articles/log-convention.md' },
+            { text: "Data and Action Oriented Programming", link: '/articles/DAOP.md' }
           ]
         }
       ],
@@ -44,7 +45,12 @@ export default defineConfig({
         {
           text: 'Language',
           items: [
-            { text: "Data and Action Oriented Programming", link: '/language/DAOP.md' }
+            { text: "Aliasing and Substitutions", link: '/language/aliasing_and_substitutions.md' },
+            { text: "Data", link: '/language/data.md' },
+            { text: "Variables", link: '/language/variables.md' },
+            { text: "Functions", link: '/language/functions.md' },
+            { text: "Loops", link: '/language/loop.md' },
+            { text: "Conditions", link: '/language/conditions.md' },
           ]
         }
       ]
