@@ -12,6 +12,11 @@ export default defineConfig({
   ],
 
   themeConfig: {
+
+    search: {
+      provider: 'local'
+    },
+
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -20,6 +25,7 @@ export default defineConfig({
       { text: 'Language', link: '/language/' }
     ],
 
+    //@ts-ignore
     sidebar: {
       '/articles/': [
         {
@@ -43,14 +49,25 @@ export default defineConfig({
 
       '/language/': [
         {
-          text: 'Language',
           items: [
-            { text: "Aliasing and Substitutions", link: '/language/aliasing_and_substitutions.md' },
-            { text: "Data", link: '/language/data.md' },
-            { text: "Variables", link: '/language/variables.md' },
-            { text: "Functions", link: '/language/functions.md' },
-            { text: "Loops", link: '/language/loop.md' },
-            { text: "Conditions", link: '/language/conditions.md' },
+            { text: "Introduction", link: '/language/index.md' },
+            { text: "Project Structure", link: '/language/project_structure.md' },
+            { text: "Core Concepts", link: '/language/core_concepts.md', items: [
+                { text: "Expressions and Statements", link: '/language/core_concepts/expression_and_statements.md' },
+                { text: "Data Types", link: '/language/core_concepts/data_types.md' }
+            ]},
+            { text: "Language Reference", link: '/language/language_reference.md', items: [
+                { text: "Variables", link: '/language/language_reference/variables.md' },
+                { text: "Functions", link: '/language/language_reference/functions.md' },
+                { text: "Directives", link: '/language/language_reference/directives.md' },
+                { text: "Control Flow", link: '/language/language_reference/control_flow.md' },
+                { text: "Data", link: '/language/language_reference/data.md' },
+            ]},
+            { text: "Module System", link: '/language/module_system.md', items: [
+                { text: "External Packages", link: '/language/module_system/external_packages.md' },
+                { text: "Internal References", link: '/language/module_system/internal_references.md' } 
+            ]},
+            {text: "Summary", link: '/language/summary.md'}
           ]
         }
       ]
