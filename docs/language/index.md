@@ -21,7 +21,3 @@ Bliss is an evolving language. Features will be added, and the specification wil
 ## A Note on This Documentation
 
 Each article in this reference covers exactly one language construct. Where a concept depends on another, it will be referenced explicitly. Readers are expected to be comfortable with general programming concepts such as types, functions, and control flow.
-
----
-
-Short, grounded, and doesn't make promises the language can't keep yet. Want to adjust the tone or add anything?

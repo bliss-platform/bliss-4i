@@ -11,7 +11,3 @@ This section defines the foundational ideas that underpin the Bliss language. Ev
 ---
 
 These are not features — they are the rules the language is built on. When in doubt about why a construct behaves the way it does, the answer will almost always trace back to one of these two concepts.
-
----
-
-Short and purposeful. It sets expectations without repeating what the subsections will cover in detail. Ready for `expressions_and_statements.md`?
